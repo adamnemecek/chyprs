@@ -1,4 +1,7 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{
+    HashMap,
+    HashSet,
+};
 use std::iter::Iterator;
 
 #[derive(Debug)]
@@ -78,7 +81,7 @@ impl<T> EData<T> {
 }
 
 #[derive(Debug)]
-struct Graph<T> {
+pub struct Graph<T> {
     vdata: HashMap<usize, VData<T>>,
     edata: HashMap<usize, EData<T>>,
     inputs: Vec<usize>,
@@ -88,7 +91,7 @@ struct Graph<T> {
 }
 
 impl<T> Graph<T> {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             vdata: HashMap::new(),
             edata: HashMap::new(),
@@ -110,47 +113,66 @@ impl<T> Graph<T> {
     //     }
     // }
 
-    fn vertices(&self) -> impl Iterator<Item = &usize> {
+    pub fn vertices(&self) -> impl Iterator<Item = &usize> {
         self.vdata.keys()
     }
 
-    fn edges(&self) -> impl Iterator<Item = &usize> {
+    pub fn edges(&self) -> impl Iterator<Item = &usize> {
         self.edata.keys()
     }
 
-    fn num_vertices(&self) -> usize {
+    pub fn num_vertices(&self) -> usize {
         self.vdata.len()
     }
 
-    fn num_edges(&self) -> usize {
+    pub fn num_edges(&self) -> usize {
         self.edata.len()
     }
 
-    fn vertex_data(&self, v: usize) -> Option<&VData<T>> {
+    pub fn vertex_data(
+        &self,
+        v: usize,
+    ) -> Option<&VData<T>> {
         self.vdata.get(&v)
     }
 
-    fn edge_data(&self, e: usize) -> Option<&EData<T>> {
+    pub fn edge_data(&self, e: usize) -> Option<&EData<T>> {
         self.edata.get(&e)
     }
 
-    fn in_edges(&self, v: usize) -> Option<&HashSet<usize>> {
+    pub fn in_edges(
+        &self,
+        v: usize,
+    ) -> Option<&HashSet<usize>> {
         self.vdata.get(&v).map(|data| &data.in_edges)
     }
 
-    fn out_edges(&self, v: usize) -> Option<&HashSet<usize>> {
+    pub fn out_edges(
+        &self,
+        v: usize,
+    ) -> Option<&HashSet<usize>> {
         self.vdata.get(&v).map(|data| &data.out_edges)
     }
 
-    fn in_indices(&self, v: usize) -> Option<&HashSet<usize>> {
+    pub fn in_indices(
+        &self,
+        v: usize,
+    ) -> Option<&HashSet<usize>> {
         self.vdata.get(&v).map(|data| &data.in_indices)
     }
 
-    fn out_indices(&self, v: usize) -> Option<&HashSet<usize>> {
+    pub fn out_indices(
+        &self,
+        v: usize,
+    ) -> Option<&HashSet<usize>> {
         self.vdata.get(&v).map(|data| &data.out_indices)
     }
 
-    fn set_vertex_data(&mut self, v: usize, data: VData<T>) {
+    pub fn set_vertex_data(
+        &mut self,
+        v: usize,
+        data: VData<T>,
+    ) {
         self.vdata.insert(v, data);
     }
 
@@ -158,7 +180,12 @@ impl<T> Graph<T> {
         self.edata.insert(e, data);
     }
 
-    fn add_vertex(&mut self, x: f32, y: f32, value: T) -> usize {
+    pub fn add_vertex(
+        &mut self,
+        x: f32,
+        y: f32,
+        value: T,
+    ) -> usize {
         let index = self.vindex;
         self.vdata.insert(index, VData::new(x, y, value));
         self.vindex += 1;
