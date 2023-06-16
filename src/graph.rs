@@ -138,5 +138,152 @@ impl<T> Graph<T> {
         self.vdata.get(&v).map(|data| &data.in_edges)
     }
 
-    // fn out_edges(&self, v: usize) -> Option<&.
+    fn out_edges(&self, v: usize) -> Option<&HashSet<usize>> {
+        self.vdata.get(&v).map(|data| &data.out_edges)
+    }
+
+    fn in_indices(&self, v: usize) -> Option<&HashSet<usize>> {
+        self.vdata.get(&v).map(|data| &data.in_indices)
+    }
+
+    fn out_indices(&self, v: usize) -> Option<&HashSet<usize>> {
+        self.vdata.get(&v).map(|data| &data.out_indices)
+    }
+
+    fn set_vertex_data(&mut self, v: usize, data: VData<T>) {
+        self.vdata.insert(v, data);
+    }
+
+    fn set_edge_data(&mut self, e: usize, data: EData<T>) {
+        self.edata.insert(e, data);
+    }
+
+    fn add_vertex(&mut self, x: f32, y: f32, value: T) -> usize {
+        let index = self.vindex;
+        self.vdata.insert(index, VData::new(x, y, value));
+        self.vindex += 1;
+        index
+    }
+
+    // fn add_edge(
+    //     &mut self,
+    //     s: Option<Vec<usize>>,
+    //     t: Option<Vec<usize>>,
+    //     value: T,
+    //     x: f32,
+    //     y: f32,
+    //     fg: String,
+    //     bg: String,
+    //     hyper: bool,
+    // ) -> usize {
+    //     let index = self.eindex;
+    //     self.edata
+    //         .insert(index, EData::new(s, t, value, x, y, fg, bg, hyper));
+    //     self.eindex += 1;
+
+    //     if let Some(s) = s {
+    //         for v in &s {
+    //             self.vdata.get_mut(v).unwrap().out_edges.insert(index);
+    //         }
+    //     }
+
+    //     if let Some(t) = t {
+    //         for v in &t {
+    //             self.vdata.get_mut(v).unwrap().in_edges.insert(index);
+    //         }
+    //     }
+
+    //     index
+    // }
+
+    fn set_inputs(&mut self, inputs: Vec<usize>) {
+        self.inputs = inputs;
+    }
+
+    fn set_outputs(&mut self, outputs: Vec<usize>) {
+        self.outputs = outputs;
+    }
+
+    // // fn out_edges(&self, v: usize) -> Option<&.
+    // fn add_vertex(&mut self, x: f32, y: f32, value: &str, name: VertexIndex) -> VertexIndex {
+    //     if name == -1 {
+    //         let v = self.vindex;
+    //         self.vindex += 1;
+    //         self.vdata.insert(v, VData {
+    //             x,
+    //             y,
+    //             value: value.to_string(),
+    //             in_edges: HashSet::new(),
+    //             out_edges: HashSet::new(),
+    //             in_indices: HashSet::new(),
+    //             out_indices: HashSet::new(),
+    //             highlight: false,
+    //         });
+    //         v
+    //     } else {
+    //         let v = name;
+    //         let max_index = name.max(self.vindex);
+    //         self.vindex = max_index + 1;
+    //         self.vdata.insert(v, VData {
+    //             x,
+    //             y,
+    //             value: value.to_string(),
+    //             in_edges: HashSet::new(),
+    //             out_edges: HashSet::new(),
+    //             in_indices: HashSet::new(),
+    //             out_indices: HashSet::new(),
+    //             highlight: false,
+    //         });
+    //         v
+    //     }
+    // }
+
+    // fn add_edge(&mut self, s: Vec<VertexIndex>, t: Vec<VertexIndex>, value: &str, x: f32, y: f32, fg: &str, bg: &str, hyper: bool, name: EdgeIndex) -> EdgeIndex {
+    //     if name == -1 {
+    //         let e = self.eindex;
+    //         self.eindex += 1;
+    //         self.edata.insert(e, EData {
+    //             s,
+    //             t,
+    //             value: value.to_string(),
+    //             x,
+    //             y,
+    //             fg: fg.to_string(),
+    //             bg: bg.to_string(),
+    //             hyper,
+    //             highlight: false,
+    //         });
+    //         for v in &s {
+    //             self.vdata.get_mut(v).unwrap().out_edges.insert(e);
+    //         }
+    //         for v in &t {
+    //             self.vdata.get_mut(v).unwrap().in_edges.insert(e);
+    //         }
+    //         e
+    //     } else {
+    //         let e = name;
+    //         let max_index = name.max(self.eindex);
+    //         self.eindex = max_index + 1;
+    //         self.edata.insert(e, EData {
+    //             s,
+    //             t,
+    //             value: value.to_string(),
+    //             x,
+    //             y,
+    //             fg: fg.to_string(),
+    //             bg: bg.to_string(),
+    //             hyper,
+    //             highlight: false,
+    //         });
+    //         for v in &s {
+    //             self.vdata.get_mut(v).unwrap().out_edges.insert(e);
+    //         }
+    //         for v in &t {
+    //             self.vdata.get_mut(v).unwrap().in_edges.insert(e);
+    //         }
+    //         e
+    //     }
+    // }
+
+    // fn remove_vertex(&mut self, v: VertexIndex, strict.
 }
