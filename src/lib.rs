@@ -1,14 +1,11 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+mod layout;
+mod matcher;
+mod parser;
+mod rewrite;
+mod rule;
+mod scraps;
+mod state;
+mod term;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+mod graph;
+mod tactic;
