@@ -18,12 +18,34 @@ pub use crate::prelude::*;
 
 #[derive(Clone)]
 pub struct Match<'a, T> {
-    dom: Option<&'a Graph<T>>,
-    cod: Option<&'a Graph<T>>,
+    dom: &'a Graph<T>,
+    cod: &'a Graph<T>,
     vmap: HashMap<usize, usize>,
     vimg: HashSet<usize>,
     emap: HashMap<usize, usize>,
     eimg: HashSet<usize>,
+}
+
+// pub enum Data<'a, T> {
+//     Graphs(Graph<T>, Graph<T>),
+
+// }
+
+impl<'a, T> From<(&'a Graph<T>, &'a Graph<T>)>
+    for Match<'a, T>
+{
+    fn from(
+        (dom, cod): (&'a Graph<T>, &'a Graph<T>),
+    ) -> Self {
+        Self {
+            dom,
+            cod,
+            vmap: <_>::default(),
+            vimg: <_>::default(),
+            emap: <_>::default(),
+            eimg: <_>::default(),
+        }
+    }
 }
 
 impl<'a, T> Match<'a, T> {
