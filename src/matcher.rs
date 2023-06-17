@@ -334,8 +334,8 @@ impl<'a, T> Matches<'a, T> {
         initial_match: Option<Match<'a, T>>,
         convex: bool,
     ) -> Self {
-        // let initial_match = initial_match
-        //     .unwrap_or_else(|| Match::new(dom, cod));
+        let initial_match = initial_match
+            .unwrap_or_else(|| Match::new(dom, cod));
         // let match_stack = if initial_match.map_scalars() {
         //     vec![initial_match].into()
         // } else {
