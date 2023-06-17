@@ -16,7 +16,7 @@ pub use crate::prelude::*;
 //     }
 // }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Match<'a, T> {
     dom: &'a Graph<T>,
     cod: &'a Graph<T>,
@@ -24,28 +24,6 @@ pub struct Match<'a, T> {
     vimg: HashSet<usize>,
     emap: HashMap<usize, usize>,
     eimg: HashSet<usize>,
-}
-
-// pub enum Data<'a, T> {
-//     Graphs(Graph<T>, Graph<T>),
-
-// }
-
-impl<'a, T> From<(&'a Graph<T>, &'a Graph<T>)>
-    for Match<'a, T>
-{
-    fn from(
-        (dom, cod): (&'a Graph<T>, &'a Graph<T>),
-    ) -> Self {
-        Self {
-            dom,
-            cod,
-            vmap: <_>::default(),
-            vimg: <_>::default(),
-            emap: <_>::default(),
-            eimg: <_>::default(),
-        }
-    }
 }
 
 impl<'a, T> Match<'a, T> {
@@ -62,17 +40,6 @@ impl<'a, T> Match<'a, T> {
             eimg: <_>::default(),
         }
     }
-
-    //     pub fn copy(&self) -> Self {
-    //         Match {
-    //             dom: self.dom,
-    //             cod: self.cod,
-    //             vmap: self.vmap.clone(),
-    //             vimg: self.vimg.clone(),
-    //             emap: self.emap.clone(),
-    //             eimg: self.eimg.clone(),
-    //         }
-    //     }
 
     //     pub fn try_add_vertex(&mut self, v: usize, cod_v: usize) -> bool {
     //         match_log(&format!("trying to add vertex {} -> {} to match:", v, cod_v));
