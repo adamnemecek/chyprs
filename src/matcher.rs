@@ -276,4 +276,46 @@ impl<'a, T> Match<'a, T> {
 
         // vec![]
     }
+
+    pub fn is_total(&self) -> bool {
+        self.vmap.len() == self.dom.num_vertices()
+            && self.emap.len() == self.dom.num_edges()
+    }
+
+    pub fn is_surjective(&self) -> bool {
+        self.vimg.len() == self.cod.num_vertices()
+            && self.eimg.len() == self.cod.num_edges()
+    }
+
+    pub fn is_injective(&self) -> bool {
+        self.vmap.len() == self.vimg.len()
+    }
+
+    pub fn is_convex(&self) -> bool {
+        unimplemented!()
+        // if !self.is_injective() {
+        //     return false;
+        // }
+
+        // let future: HashSet<_> = self
+        //     .cod
+        //     .successors(
+        //         self.dom
+        //             .outputs()
+        //             .iter()
+        //             .filter(|v| self.vmap.contains_key(v))
+        //             .map(|v| self.vmap[v]),
+        //     )
+        //     .collect();
+
+        // for v in self.dom.inputs() {
+        //     if let Some(cod_v) = self.vmap.get(&v) {
+        //         if future.contains(cod_v) {
+        //             return false;
+        //         }
+        //     }
+        // }
+
+        // true
+    }
 }
