@@ -1,18 +1,18 @@
 // use std::collections::HashSet;
 // use std::iter::FromIterator;
 
-// use crate::prelude::Graph;
+use crate::prelude::Graph;
 
-// #[derive(Debug)]
-// pub struct RuleError;
+#[derive(Debug)]
+pub struct RuleError;
 
-// #[derive(Debug, Clone)]
-// pub struct Rule<T> {
-//     lhs: Graph<T>,
-//     rhs: Graph<T>,
-//     name: String,
-//     equiv: bool,
-// }
+#[derive(Debug, Clone)]
+pub struct Rule<T> {
+    lhs: Graph<T>,
+    rhs: Graph<T>,
+    name: String,
+    equiv: bool,
+}
 
 // impl<T> Rule<T> {
 //     pub fn new(

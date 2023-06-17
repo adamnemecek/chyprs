@@ -34,7 +34,7 @@ impl<T> VData<T> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EData<T> {
     value: T,
     highlight: bool,
@@ -80,7 +80,7 @@ impl<T> EData<T> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Graph<T> {
     vdata: HashMap<usize, VData<T>>,
     edata: HashMap<usize, EData<T>>,
