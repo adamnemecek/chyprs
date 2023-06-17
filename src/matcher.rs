@@ -169,19 +169,17 @@ impl<'a, T> Match<'a, T> {
 
     pub fn dom_nhd_mapped(&self, v: usize) -> bool {
         // self.dom
-        //     .unwrap()
         //     .in_edges(v)
         //     .all(|e| self.emap.contains_key(&e))
         //     && self
         //         .dom
-        //         .unwrap()
         //         .out_edges(v)
         //         .all(|e| self.emap.contains_key(&e))
         unimplemented!()
     }
 
     pub fn map_scalars(&mut self) -> bool {
-        // let mut cod_sc: Vec<(usize, T)> = Vec::new();
+        // let mut cod_sc = vec![];
 
         // for e in self.cod.edges() {
         //     let ed = self.cod.edge_data(e);
@@ -319,3 +317,100 @@ impl<'a, T> Match<'a, T> {
         // true
     }
 }
+
+use std::collections::VecDeque;
+
+pub struct Matches<'a, T> {
+    dom: &'a Graph<T>,
+    cod: &'a Graph<T>,
+    convex: bool,
+    match_stack: VecDeque<Match<'a, T>>,
+}
+
+// impl<'a> Iterator for Matches<'a> {
+//     type Item = Match<'a>;
+
+//     fn next(&mut self) -> Option<Self::Item> {
+//         while let Some(m) = self.match_stack.pop_back() {
+//             if m.is_total() {
+//                 match_log(format!(
+//                     "got successful match:\n{}",
+//                     m
+//                 ));
+//                 if self.convex {
+//                     if m.is_convex() {
+//                         match_log(
+//                             "match is convex, returning",
+//                         );
+//                         return Some(m);
+//                     } else {
+//                         match_log(
+//                             "match is not convex, dropping",
+//                         );
+//                     }
+//                 } else {
+//                     return Some(m);
+//                 }
+//             } else {
+//                 self.match_stack.extend(m.more());
+//             }
+//         }
+//         None
+//     }
+// }
+
+// impl<'a> Matches<'a> {
+//     fn new(dom: &'a Graph, cod: &'a Graph, initial_match: Option<Match<'a>>, convex: bool) -> Self {
+//         let initial_match = initial_match.unwrap_or_else(|| Match::new(dom, cod));
+//         let match_stack = if initial_match.map_scalars() {
+//             vec![initial_match].into()
+//         } else {
+//             VecDeque::new()
+//         };
+
+//         Matches {
+//             dom,
+//             cod,
+//             convex,
+//             match_stack,
+//         }
+//     }
+// }
+
+// fn match_graph(dom: &Graph, cod: &Graph, convex: bool) -> Matches {
+//     Matches::new(dom, cod, None, convex)
+// }
+
+// fn match_rule(r: &Rule, g: &Graph, convex: bool) -> Matches {
+//     Matches::new(&r.lhs, g, None, convex)
+// }
+
+// fn find_iso(g: &Graph, h: &Graph) -> Option<Match> {
+//     let g_in = g.inputs();
+//     let g_out = g.outputs();
+//     let h_in = h.inputs();
+//     let h_out = h.outputs();
+//     if g_in.len() != h_in.len() || g_out.len() != h_out.len() {
+//         return None;
+//     }
+
+//     let mut m0 = Match::new(g, h);
+//     for i in 0..g_in.len() {
+//         if !m0.try_add_vertex(g_in[i], h_in[i]) {
+//             return None;
+//         }
+//     }
+//     for i in 0..g_out.len() {
+//         if !m0.try_add_vertex(g_out[i], h_out[i]) {
+//             return None;
+//         }
+//     }
+
+//     for m in Matches::new(g, h, Some(m0), false) {
+//         if m.is_surjective() {
+//             return Some(m);
+//         }
+//     }
+
+//     None
+// }
