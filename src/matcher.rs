@@ -327,6 +327,31 @@ pub struct Matches<'a, T> {
     match_stack: VecDeque<Match<'a, T>>,
 }
 
+impl<'a, T> Matches<'a, T> {
+    pub fn new(
+        dom: &'a Graph<T>,
+        cod: &'a Graph<T>,
+        initial_match: Option<Match<'a, T>>,
+        convex: bool,
+    ) -> Self {
+        // let initial_match = initial_match
+        //     .unwrap_or_else(|| Match::new(dom, cod));
+        // let match_stack = if initial_match.map_scalars() {
+        //     vec![initial_match].into()
+        // } else {
+        //     VecDeque::new()
+        // };
+
+        // Self {
+        //     dom,
+        //     cod,
+        //     convex,
+        //     match_stack,
+        // }
+        unimplemented!()
+    }
+}
+
 impl<'a, T> Iterator for Matches<'a, T> {
     type Item = Match<'a, T>;
 
@@ -355,24 +380,6 @@ impl<'a, T> Iterator for Matches<'a, T> {
         None
     }
 }
-
-// impl<'a> Matches<'a> {
-//     fn new(dom: &'a Graph, cod: &'a Graph, initial_match: Option<Match<'a>>, convex: bool) -> Self {
-//         let initial_match = initial_match.unwrap_or_else(|| Match::new(dom, cod));
-//         let match_stack = if initial_match.map_scalars() {
-//             vec![initial_match].into()
-//         } else {
-//             VecDeque::new()
-//         };
-
-//         Matches {
-//             dom,
-//             cod,
-//             convex,
-//             match_stack,
-//         }
-//     }
-// }
 
 // fn match_graph(dom: &Graph, cod: &Graph, convex: bool) -> Matches {
 //     Matches::new(dom, cod, None, convex)
