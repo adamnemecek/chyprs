@@ -327,37 +327,34 @@ pub struct Matches<'a, T> {
     match_stack: VecDeque<Match<'a, T>>,
 }
 
-// impl<'a> Iterator for Matches<'a> {
-//     type Item = Match<'a>;
+impl<'a, T> Iterator for Matches<'a, T> {
+    type Item = Match<'a, T>;
 
-//     fn next(&mut self) -> Option<Self::Item> {
-//         while let Some(m) = self.match_stack.pop_back() {
-//             if m.is_total() {
-//                 match_log(format!(
-//                     "got successful match:\n{}",
-//                     m
-//                 ));
-//                 if self.convex {
-//                     if m.is_convex() {
-//                         match_log(
-//                             "match is convex, returning",
-//                         );
-//                         return Some(m);
-//                     } else {
-//                         match_log(
-//                             "match is not convex, dropping",
-//                         );
-//                     }
-//                 } else {
-//                     return Some(m);
-//                 }
-//             } else {
-//                 self.match_stack.extend(m.more());
-//             }
-//         }
-//         None
-//     }
-// }
+    fn next(&mut self) -> Option<Self::Item> {
+        while let Some(m) = self.match_stack.pop_back() {
+            if m.is_total() {
+                // println!("got successful match:\n{}", m);
+                if self.convex {
+                    if m.is_convex() {
+                        println!(
+                            "match is convex, returning",
+                        );
+                        return Some(m);
+                    } else {
+                        println!(
+                            "match is not convex, dropping",
+                        );
+                    }
+                } else {
+                    return Some(m);
+                }
+            } else {
+                self.match_stack.extend(m.more());
+            }
+        }
+        None
+    }
+}
 
 // impl<'a> Matches<'a> {
 //     fn new(dom: &'a Graph, cod: &'a Graph, initial_match: Option<Match<'a>>, convex: bool) -> Self {
