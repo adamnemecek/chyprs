@@ -6,9 +6,10 @@ mod simptac;
 // use crate::rule::{Rule, RuleError};
 // use crate::matcher::{Match, match_rule, find_iso};
 // use crate::state;
+use crate::prelude::*;
 
-// use std::collections::HashMap;
-// use std::collections::HashSet;
+use std::collections::HashMap;
+use std::collections::HashSet;
 
 // use regex::Regex;
 
