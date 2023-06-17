@@ -41,7 +41,7 @@ impl<'a, T> Match<'a, T> {
         }
     }
 
-    fn try_add_vertex(
+    pub fn try_add_vertex(
         &mut self,
         v: usize,
         cod_v: usize,
@@ -99,7 +99,7 @@ impl<'a, T> Match<'a, T> {
         unimplemented!()
     }
 
-    fn try_add_edge(
+    pub fn try_add_edge(
         &mut self,
         e: usize,
         cod_e: usize,
@@ -164,7 +164,7 @@ impl<'a, T> Match<'a, T> {
         unimplemented!()
     }
 
-    fn dom_nhd_mapped(&self, v: usize) -> bool {
+    pub fn dom_nhd_mapped(&self, v: usize) -> bool {
         // self.dom
         //     .unwrap()
         //     .in_edges(v)
@@ -175,5 +175,102 @@ impl<'a, T> Match<'a, T> {
         //         .out_edges(v)
         //         .all(|e| self.emap.contains_key(&e))
         unimplemented!()
+    }
+
+    pub fn map_scalars(&mut self) -> bool {
+        // let mut cod_sc: Vec<(usize, T)> = Vec::new();
+
+        // for e in self.cod.unwrap().edges() {
+        //     let ed = self.cod.unwrap().edge_data(e);
+        //     if ed.s.is_empty() && ed.t.is_empty() {
+        //         cod_sc.push((e, ed.value));
+        //     }
+        // }
+
+        // for e in self.dom.unwrap().edges() {
+        //     match_log(&format!("trying to map scalar edge {}", e));
+        //     let ed = self.dom.unwrap().edge_data(e);
+        //     if !ed.s.is_empty() || !ed.t.is_empty() {
+        //         continue;
+        //     }
+
+        //     let mut found = false;
+        //     for i in 0..cod_sc.len() {
+        //         let (e1, val) = cod_sc[i];
+        //         if val == ed.value {
+        //             cod_sc.remove(i);
+        //             self.emap.insert(e, e1);
+        //             self.eimg.insert(e1);
+        //             found = true;
+        //             match_log(&format!("successfully mapped scalar {} -> {}", e, e1));
+        //             break;
+        //         }
+        //     }
+
+        //     if !found {
+        //         match_log(&format!("match failed: could not map scalar edge {}", e));
+        //         return false;
+        //     }
+        // }
+
+        // true
+        unimplemented!()
+    }
+
+    pub fn more(&self) -> Vec<Self> {
+        unimplemented!()
+        // let mut ms: Vec<Match> = Vec::new();
+
+        // for v in self.vmap.keys() {
+        //     if self.dom_nhd_mapped(*v) {
+        //         continue;
+        //     }
+
+        //     let cod_v = self.vmap[v];
+
+        //     for e in self.dom.unwrap().in_edges(*v) {
+        //         if self.emap.contains_key(&e) {
+        //             continue;
+        //         }
+
+        //         for cod_e in self.cod.unwrap().in_edges(cod_v) {
+        //             let mut m1 = self.copy();
+        //             if m1.try_add_edge(e, cod_e) {
+        //                 ms.push(m1);
+        //             }
+        //         }
+        //         return ms;
+        //     }
+
+        //     for e in self.dom.unwrap().out_edges(*v) {
+        //         if self.emap.contains_key(&e) {
+        //             continue;
+        //         }
+
+        //         for cod_e in self.cod.unwrap().out_edges(cod_v) {
+        //             let mut m1 = self.copy();
+        //             if m1.try_add_edge(e, cod_e) {
+        //                 ms.push(m1);
+        //             }
+        //         }
+        //         return ms;
+        //     }
+        // }
+
+        // for v in self.dom.unwrap().vertices() {
+        //     if self.vmap.contains_key(&v) {
+        //         continue;
+        //     }
+
+        //     for cod_v in self.cod.unwrap().vertices() {
+        //         let mut m1 = self.copy();
+        //         if m1.try_add_vertex(v, cod_v) {
+        //             ms.push(m1);
+        //         }
+        //     }
+        //     return ms;
+        // }
+
+        // vec![]
     }
 }
