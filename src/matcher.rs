@@ -46,34 +46,37 @@ impl<'a, T> Match<'a, T> {
         v: usize,
         cod_v: usize,
     ) -> bool {
-        // match_log(&format!("trying to add vertex {} -> {} to match:", v, cod_v));
-        // match_log(&format!("{:?}", self));
+        // println!(!("trying to add vertex {} -> {} to match:", v, cod_v));
+        // println!(!("{:?}", self));
 
-        // if self.vmap.contains_key(&v) {
-        //     match_log(&format!("vertex already mapped to {}", self.vmap[&v]));
-        //     return self.vmap[&v] == cod_v;
-        // }
+        if self.vmap.contains_key(&v) {
+            println!(
+                "vertex already mapped to {}",
+                self.vmap[&v]
+            );
+            return self.vmap[&v] == cod_v;
+        }
 
-        // let v_val = self.dom.unwrap().vertex_data(v).value;
-        // let cod_v_val = self.cod.unwrap().vertex_data(cod_v).value;
+        // let v_val = self.dom.vertex_data(v).value;
+        // let cod_v_val = self.cod.vertex_data(cod_v).value;
 
         // if v_val != cod_v_val {
-        //     match_log(&format!("vertex failed: values {} != {}", v_val, cod_v_val));
+        //     println!(!("vertex failed: values {} != {}", v_val, cod_v_val));
         //     return false;
         // }
 
-        // if self.cod.unwrap().is_boundary(cod_v) && !self.dom.unwrap().is_boundary(v) {
+        // if self.cod.is_boundary(cod_v) && !self.dom.is_boundary(v) {
         //     match_log("vertex failed: cod v is boundary but dom v is not");
         //     return false;
         // }
 
         // if self.vimg.contains(&cod_v) {
-        //     if !self.dom.unwrap().is_boundary(v) {
+        //     if !self.dom.is_boundary(v) {
         //         match_log("vertex failed: non-injective on interior vertex");
         //         return false;
         //     }
         //     for (dv, cv) in self.vmap.iter() {
-        //         if cv == &cod_v && !self.dom.unwrap().is_boundary(*dv) {
+        //         if cv == &cod_v && !self.dom.is_boundary(*dv) {
         //             match_log("vertex failed: non-injective on interior vertex");
         //             return false;
         //         }
@@ -83,12 +86,12 @@ impl<'a, T> Match<'a, T> {
         // self.vmap.insert(v, cod_v);
         // self.vimg.insert(cod_v);
 
-        // if !self.dom.unwrap().is_boundary(v) {
-        //     if self.dom.unwrap().in_edges(v).count() != self.cod.unwrap().in_edges(cod_v).count() {
+        // if !self.dom.is_boundary(v) {
+        //     if self.dom.in_edges(v).count() != self.cod.in_edges(cod_v).count() {
         //         match_log("vertex failed: in_edges cannot satisfy gluing conds");
         //         return false;
         //     }
-        //     if self.dom.unwrap().out_edges(v).count() != self.cod.unwrap().out_edges(cod_v).count() {
+        //     if self.dom.out_edges(v).count() != self.cod.out_edges(cod_v).count() {
         //         match_log("vertex failed: out_edges cannot satisfy gluing conds");
         //         return false;
         //     }
@@ -104,18 +107,18 @@ impl<'a, T> Match<'a, T> {
         e: usize,
         cod_e: usize,
     ) -> bool {
-        // match_log(&format!(
+        // println!(!(
         //     "trying to add edge {} -> {} to match:",
         //     e, cod_e
         // ));
-        // match_log(&format!("{:?}", self));
+        // println!(!("{:?}", self));
 
-        // let e_val = self.dom.unwrap().edge_data(e).value;
+        // let e_val = self.dom.edge_data(e).value;
         // let cod_e_val =
-        //     self.cod.unwrap().edge_data(cod_e).value;
+        //     self.cod.edge_data(cod_e).value;
 
         // if e_val != cod_e_val {
-        //     match_log(&format!(
+        //     println!(!(
         //         "edge failed: values {} != {}",
         //         e_val, cod_e_val
         //     ));
@@ -130,10 +133,10 @@ impl<'a, T> Match<'a, T> {
         // self.emap.insert(e, cod_e);
         // self.eimg.insert(cod_e);
 
-        // let s = self.dom.unwrap().source(e);
-        // let cod_s = self.cod.unwrap().source(cod_e);
-        // let t = self.dom.unwrap().target(e);
-        // let cod_t = self.cod.unwrap().target(cod_e);
+        // let s = self.dom.source(e);
+        // let cod_s = self.cod.source(cod_e);
+        // let t = self.dom.target(e);
+        // let cod_t = self.cod.target(cod_e);
 
         // if s.len() != cod_s.len() || t.len() != cod_t.len()
         // {
@@ -180,16 +183,16 @@ impl<'a, T> Match<'a, T> {
     pub fn map_scalars(&mut self) -> bool {
         // let mut cod_sc: Vec<(usize, T)> = Vec::new();
 
-        // for e in self.cod.unwrap().edges() {
-        //     let ed = self.cod.unwrap().edge_data(e);
+        // for e in self.cod.edges() {
+        //     let ed = self.cod.edge_data(e);
         //     if ed.s.is_empty() && ed.t.is_empty() {
         //         cod_sc.push((e, ed.value));
         //     }
         // }
 
-        // for e in self.dom.unwrap().edges() {
-        //     match_log(&format!("trying to map scalar edge {}", e));
-        //     let ed = self.dom.unwrap().edge_data(e);
+        // for e in self.dom.edges() {
+        //     println!(!("trying to map scalar edge {}", e));
+        //     let ed = self.dom.edge_data(e);
         //     if !ed.s.is_empty() || !ed.t.is_empty() {
         //         continue;
         //     }
@@ -202,13 +205,13 @@ impl<'a, T> Match<'a, T> {
         //             self.emap.insert(e, e1);
         //             self.eimg.insert(e1);
         //             found = true;
-        //             match_log(&format!("successfully mapped scalar {} -> {}", e, e1));
+        //             println!(!("successfully mapped scalar {} -> {}", e, e1));
         //             break;
         //         }
         //     }
 
         //     if !found {
-        //         match_log(&format!("match failed: could not map scalar edge {}", e));
+        //         println!(!("match failed: could not map scalar edge {}", e));
         //         return false;
         //     }
         // }
@@ -228,12 +231,12 @@ impl<'a, T> Match<'a, T> {
 
         //     let cod_v = self.vmap[v];
 
-        //     for e in self.dom.unwrap().in_edges(*v) {
+        //     for e in self.dom.in_edges(*v) {
         //         if self.emap.contains_key(&e) {
         //             continue;
         //         }
 
-        //         for cod_e in self.cod.unwrap().in_edges(cod_v) {
+        //         for cod_e in self.cod.in_edges(cod_v) {
         //             let mut m1 = self.copy();
         //             if m1.try_add_edge(e, cod_e) {
         //                 ms.push(m1);
@@ -242,12 +245,12 @@ impl<'a, T> Match<'a, T> {
         //         return ms;
         //     }
 
-        //     for e in self.dom.unwrap().out_edges(*v) {
+        //     for e in self.dom.out_edges(*v) {
         //         if self.emap.contains_key(&e) {
         //             continue;
         //         }
 
-        //         for cod_e in self.cod.unwrap().out_edges(cod_v) {
+        //         for cod_e in self.cod.out_edges(cod_v) {
         //             let mut m1 = self.copy();
         //             if m1.try_add_edge(e, cod_e) {
         //                 ms.push(m1);
@@ -257,12 +260,12 @@ impl<'a, T> Match<'a, T> {
         //     }
         // }
 
-        // for v in self.dom.unwrap().vertices() {
+        // for v in self.dom.vertices() {
         //     if self.vmap.contains_key(&v) {
         //         continue;
         //     }
 
-        //     for cod_v in self.cod.unwrap().vertices() {
+        //     for cod_v in self.cod.vertices() {
         //         let mut m1 = self.copy();
         //         if m1.try_add_vertex(v, cod_v) {
         //             ms.push(m1);
