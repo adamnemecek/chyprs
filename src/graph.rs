@@ -8,7 +8,7 @@ use std::iter::Iterator;
 struct GraphError;
 
 #[derive(Clone, Debug)]
-struct VData<T> {
+pub struct VData<T> {
     value: T,
     x: f32,
     y: f32,
@@ -35,7 +35,7 @@ impl<T> VData<T> {
 }
 
 #[derive(Debug)]
-struct EData<T> {
+pub struct EData<T> {
     value: T,
     highlight: bool,
     x: f32,
