@@ -50,32 +50,17 @@ impl<'a, T> From<(&'a Graph<T>, &'a Graph<T>)>
 
 impl<'a, T> Match<'a, T> {
     pub fn new(
-        dom: Option<&'a Graph<T>>,
-        cod: Option<&'a Graph<T>>,
-        m: Option<&Match<'a, T>>,
-    ) -> Result<Self, &'static str> {
-        //         if let Some(existing_match) = m {
-        //             Ok(Match {
-        //                 dom: existing_match.dom,
-        //                 cod: existing_match.cod,
-        //                 vmap: existing_match.vmap.clone(),
-        //                 vimg: existing_match.vimg.clone(),
-        //                 emap: existing_match.emap.clone(),
-        //                 eimg: existing_match.eimg.clone(),
-        //             })
-        //         } else if let (Some(d), Some(c)) = (dom, cod) {
-        //             Ok(Match {
-        //                 dom: Some(d),
-        //                 cod: Some(c),
-        //                 vmap: HashMap::new(),
-        //                 vimg: HashSet::new(),
-        //                 emap: HashMap::new(),
-        //                 eimg: HashSet::new(),
-        //             })
-        //         } else {
-        //             Err("Must provide either a match or a pair of graphs")
-        //         }
-        unimplemented!()
+        dom: &'a Graph<T>,
+        cod: &'a Graph<T>,
+    ) -> Self {
+        Self {
+            dom,
+            cod,
+            vmap: <_>::default(),
+            vimg: <_>::default(),
+            emap: <_>::default(),
+            eimg: <_>::default(),
+        }
     }
 
     //     pub fn copy(&self) -> Self {
