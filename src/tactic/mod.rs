@@ -13,15 +13,15 @@ use std::collections::HashSet;
 
 // use regex::Regex;
 
-// pub struct Tactic<'a> {
-//     __state: &'a mut state::State,
-//     __local_state: &'a mut state::RewriteState,
-//     __context: HashMap<String, Rule>,
-//     __goal_lhs: Option<Graph>,
-//     __goal_rhs: Option<Graph>,
-//     __errors: HashSet<String>,
-//     args: Vec<String>,
-// }
+pub struct Tactic<'a, T> {
+    // state: &'a mut state::State,
+    // local_state: &'a mut state::RewriteState,
+    context: HashMap<String, Rule<T>>,
+    goal_lhs: &'a Graph<T>,
+    goal_rhs: &'a Graph<T>,
+    errors: HashSet<String>,
+    args: Vec<String>,
+}
 
 // lazy_static! {
 //     static ref RULE_NAME_RE: Regex = Regex::new(r"(-)?\s*([a-zA-Z_][\.a-zA-Z0-9_]*)").unwrap();
@@ -29,14 +29,14 @@ use std::collections::HashSet;
 
 // impl<'a> Tactic<'a> {
 //     pub fn new(local_state: &'a mut state::RewriteState, args: Vec<String>) -> Tactic<'a> {
-//         Tactic {
-//             __local_state: local_state,
-//             __state: &mut local_state.state,
-//             __context: HashMap::new(),
-//             __goal_lhs: None,
-//             __goal_rhs: None,
-//             __errors: HashSet::new(),
-//             args: args,
+//         Self {
+//             local_state,
+//             state: &mut local_state.state,
+//             context: HashMap::new(),
+//             goal_lhs: None,
+//             goal_rhs: None,
+//             errors: HashSet::new(),
+//             args,
 //         }
 //     }
 
@@ -61,22 +61,22 @@ use std::collections::HashSet;
 //     }
 
 //     pub fn error(&mut self, message: &str) {
-//         if !self.__errors.contains(message) {
-//             self.__state
+//         if !self.errors.contains(message) {
+//             self.state
 //                 .errors
-//                 .push((self.__state.file_name.clone(), self.__local_state.line_number, message.to_string()));
-//             self.__errors.insert(message.to_string());
+//                 .push((self.state.file_name.clone(), self.local_state.line_number, message.to_string()));
+//             self.errors.insert(message.to_string());
 //         }
 //     }
 
 //     pub fn has_goal(&self) -> bool {
-//         self.__goal_lhs.is_some() && self.__goal_rhs.is_some()
+//         self.goal_lhs.is_some() && self.goal_rhs.is_some()
 //     }
 
 //     pub fn global_rules(&self) -> Vec<String> {
-//         self.__state.rule_sequence
+//         self.state.rule_sequence
 //             .iter()
-//             .filter(|(_, &j)| j <= self.__local_state.sequence)
+//             .filter(|(_, &j)| j <= self.local_state.sequence)
 //             .map(|(name, _)| name.clone())
 //             .collect()
 //     }
@@ -95,15 +95,15 @@ use std::collections::HashSet;
 //         let glo = local.unwrap_or(false);
 
 //         let mut rule: Option<Rule> = None;
-//         if loc && self.__context.contains_key(rule_name) {
-//             rule = self.__context.get(rule_name).cloned();
+//         if loc && self.context.contains_key(rule_name) {
+//             rule = self.context.get(rule_name).cloned();
 //         }
 
-//         if glo && rule.is_none() && self.__state.rule_sequence.contains_key(rule_name) {
-//             if let Some(j) = self.__state.rule_sequence.get(rule_name) {
-//                 if *j.<= self.__local_state.sequence
+//         if glo && rule.is_none() && self.state.rule_sequence.contains_key(rule_name) {
+//             if let Some(j) = self.state.rule_sequence.get(rule_name) {
+//                 if *j.<= self.local_state.sequence
 //                 {
-//                     rule = Some(self.__state.rule_map[&j].clone());
+//                     rule = Some(self.state.rule_map[&j].clone());
 //                 }
 //             }
 //         }
@@ -128,13 +128,13 @@ use std::collections::HashSet;
 //             (rule.lhs.clone(), rule.rhs.clone())
 //         };
 
-//         let match_result = match_rule(&lhs, &self.__goal_lhs.clone().unwrap());
+//         let match_result = match_rule(&lhs, &self.goal_lhs.clone().unwrap());
 
 //         if let Some(matching) = find_iso(&match_result) {
 //             let dpo_result = dpo(&lhs, &rhs, &matching);
 //             if dpo_result.is_ok() {
-//                 self.__goal_lhs = Some(dpo_result.unwrap().lhs);
-//                 self.__goal_rhs = Some(dpo_result.unwrap().rhs);
+//                 self.goal_lhs = Some(dpo_result.unwrap().lhs);
+//                 self.goal_rhs = Some(dpo_result.unwrap().rhs);
 //                 Ok(())
 //             } else {
 //                 self.error(&format!("Rule application failed: {:?}", dpo_result.unwrap_err()));
