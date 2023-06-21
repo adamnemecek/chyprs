@@ -412,7 +412,7 @@ impl<'a, T: Eq + std::fmt::Debug> Iterator
 //     Matches::new(&r.lhs, g, None, convex)
 // }
 
-fn find_iso<'a, T: Eq + std::fmt::Debug>(
+pub fn find_iso<'a, T: Eq + std::fmt::Debug>(
     g: &'a Graph<T>,
     h: &'a Graph<T>,
 ) -> Option<Match<'a, T>> {

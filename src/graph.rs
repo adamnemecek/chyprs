@@ -122,10 +122,28 @@ impl<T> Graph<T> {
         }
     }
 
+    ///
+    /// Returns a graph corresponding to the given permutation
+    ///
+    /// This takes a permution, given as a list [x0,..,x(n-1)], which is interpreted as the permutation { x0 -> 0, x1 -> 1, ..., x(n-1) -> n-1 }.
+    /// It produces a graph consisting just of vertices, where input xj is mapped to the same vertex as output j, representing an identity
+    /// wire connecting input xj to output j.
+    ///
+    /// Note this is one of two reasonable conventions for specifying a permutation as a list of numbers. This one has the property, e.g.
+    /// for graphs aj : 0 -> 1, we have: (a0 * a1 * a2) >> perm([2, 0, 1]) = a2 * a0 * a1.
+    ///
+    /// :param p: A permutation, given as an n-element list of integers from 0 to n-1.
+    ///
+    pub fn graph(v: Vec<usize>) -> Self {
+        unimplemented!()
+    }
+
     pub fn identity() -> Self {
-        let mut s = Self::new();
-        // s.add_vertex(0, 0, value)
-        s
+        let mut g = Self::new();
+        let v = g.add_vertex(0.0, 0.0, None);
+        g.set_inputs(vec![v]);
+        g.set_outputs(vec![v]);
+        g
     }
 
     // fn copy(&self) -> Self {
@@ -208,7 +226,7 @@ impl<T> Graph<T> {
         &mut self,
         x: f32,
         y: f32,
-        value: T,
+        value: impl Into<Option<T>>,
     ) -> usize {
         let index = self.vindex;
         self.vdata.insert(index, VData::new(x, y, value));
