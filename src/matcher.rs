@@ -412,32 +412,37 @@ impl<'a, T: Eq + std::fmt::Debug> Iterator
 //     Matches::new(&r.lhs, g, None, convex)
 // }
 
-// fn find_iso(g: &Graph, h: &Graph) -> Option<Match> {
-//     let g_in = g.inputs();
-//     let g_out = g.outputs();
-//     let h_in = h.inputs();
-//     let h_out = h.outputs();
-//     if g_in.len() != h_in.len() || g_out.len() != h_out.len() {
-//         return None;
-//     }
+fn find_iso<'a, T: Eq + std::fmt::Debug>(
+    g: &'a Graph<T>,
+    h: &'a Graph<T>,
+) -> Option<Match<'a, T>> {
+    let g_in = g.inputs();
+    let g_out = g.outputs();
+    let h_in = h.inputs();
+    let h_out = h.outputs();
+    if g_in.len() != h_in.len()
+        || g_out.len() != h_out.len()
+    {
+        return None;
+    }
 
-//     let mut m0 = Match::new(g, h);
-//     for i in 0..g_in.len() {
-//         if !m0.try_add_vertex(g_in[i], h_in[i]) {
-//             return None;
-//         }
-//     }
-//     for i in 0..g_out.len() {
-//         if !m0.try_add_vertex(g_out[i], h_out[i]) {
-//             return None;
-//         }
-//     }
+    let mut m0 = Match::new(g, h);
+    for i in 0..g_in.len() {
+        if !m0.try_add_vertex(g_in[i], h_in[i]) {
+            return None;
+        }
+    }
+    for i in 0..g_out.len() {
+        if !m0.try_add_vertex(g_out[i], h_out[i]) {
+            return None;
+        }
+    }
 
-//     for m in Matches::new(g, h, Some(m0), false) {
-//         if m.is_surjective() {
-//             return Some(m);
-//         }
-//     }
+    for m in Matches::new(g, h, Some(m0), false) {
+        if m.is_surjective() {
+            return Some(m);
+        }
+    }
 
-//     None
-// }
+    None
+}
