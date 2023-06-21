@@ -55,7 +55,7 @@ struct Rule {
     //
     var: String,
     lhs: Term,
-    op: Le,
+    op: Op,
     rhs: Term,
 }
 
@@ -290,10 +290,11 @@ fn stmt<'a>() -> Parser<'a, u8, Stmt> {
         | show().map(Stmt::Show)
 }
 
+//  rule unitL : u * id ; m = id
 fn rule<'a>() -> Parser<'a, u8, Rule> {
     (seq(b"rule") * ws(ident()) - sym(b':')
         + ws(term())
-        + le()
+        + op()
         + ws(term()))
     .map(|(((var, lhs), op), rhs)| Rule {
         var,
@@ -327,6 +328,7 @@ enum Term {
     TermRef(String),
 }
 
+#[derive(Debug)]
 enum Eq {
     Assign,
     Eq,
@@ -348,6 +350,16 @@ fn le<'a>() -> Parser<'a, u8, Le> {
         | ws(seq(b"~>")).map(|_| Le::Tilde)
 }
 
+#[derive(Debug)]
+enum Op {
+    Le(Le),
+    Eq(Eq),
+}
+
+fn op<'a>() -> Parser<'a, u8, Op> {
+    le().map(Op::Le) | eq().map(Op::Eq)
+}
+
 fn ws<'a, T: 'a>(
     p: Parser<'a, u8, T>,
 ) -> Parser<'a, u8, T> {
@@ -366,7 +378,7 @@ fn par<'a>() -> Parser<'a, u8, Term> {
 }
 
 fn par_term<'a>() -> Parser<'a, u8, Term> {
-    parens(term())
+    parens(ws(term()))
         | par()
         | perm().map(Term::Perm)
         | seq(b"id").map(|_| Term::Id)
