@@ -123,6 +123,25 @@ impl<T> Graph<T> {
     }
 
     ///
+    /// Returns a graph with a single hyperedge and given number of inputs/outputs
+    ///
+    /// :param value: The label for the hyperedge
+    /// :param arity: The number of input vertices connected to the source of the edge
+    /// :param coarity: The number of output vertices connected to the target of the edge
+    /// :param fg: An optional foregraph color, given as a 6-digit RGB hex code
+    /// :param bg: An optional background color, given as a 6-digit RGB hex code
+    ///
+    pub fn gen(
+        value: &str,
+        arity: usize,
+        coarity: usize,
+        fg: &str,
+        bg: &str,
+    ) -> Self {
+        unimplemented!()
+    }
+
+    ///
     /// Returns a graph corresponding to the given permutation
     ///
     /// This takes a permution, given as a list [x0,..,x(n-1)], which is interpreted as the permutation { x0 -> 0, x1 -> 1, ..., x(n-1) -> n-1 }.
@@ -158,6 +177,11 @@ impl<T> Graph<T> {
         g
     }
 
+    ///
+    /// Returns a graph corresponding to the identity map
+    ///
+    /// This graph has a single vertex which is both an input and an output.
+    ///
     pub fn identity() -> Self {
         let mut g = Self::new();
         let v = g.add_vertex(0.0, 0.0, None);
