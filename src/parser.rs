@@ -124,10 +124,11 @@ struct Show {
 // def_statement : "def" var "=" term [ gen_color ]
 // gen_color : "\\\"" color "\\\"" | "\\\"" color "\\\"" "\\\"" color "\\\""
 // let : "let" var "=" term
-// rule : "rule" var ":" term (eq | le) term
+// rule : "rule" var ":" term op term
 // rewrite : "rewrite" [converse] var ":" term rewrite_part*
-// rewrite_part : (eq | le) term_hole [ "by" tactic ]
+// rewrite_part : op term_hole [ "by" tactic ]
 // converse : "-"
+// op: (eq | le)
 
 // LPAREN: "("
 // tactic : [ converse ] IDENT | IDENT LPAREN [ TACTIC_ARG ("," TACTIC_ARG)* ] ")"
@@ -304,10 +305,6 @@ fn rule<'a>() -> Parser<'a, u8, Rule> {
     })
 }
 
-fn seq_<'a>() -> Parser<'a, char, String> {
-    unimplemented!()
-}
-
 fn integer_list<'a>() -> Parser<'a, u8, Vec<i64>> {
     sym(b'[') * list(ws(integer()), sym(b',')) - sym(b']')
 }
@@ -335,8 +332,8 @@ enum Eq {
 }
 
 fn eq<'a>() -> Parser<'a, u8, Eq> {
-    sym(b'=').map(|_| Eq::Assign)
-        | seq(b"==").map(|_| Eq::Eq)
+    ws(sym(b'=')).map(|_| Eq::Assign)
+        | ws(seq(b"==")).map(|_| Eq::Eq)
 }
 
 #[derive(Debug)]
@@ -377,18 +374,25 @@ fn par<'a>() -> Parser<'a, u8, Term> {
         .map(|(a, b)| Term::Par(a.into(), b.into()))
 }
 
+fn term_ref<'a>() -> Parser<'a, u8, Term> {
+    ident().map(Term::TermRef)
+}
+
 fn par_term<'a>() -> Parser<'a, u8, Term> {
-    parens(ws(term()))
+    ws(parens(ws(term())))
         | par()
         | perm().map(Term::Perm)
-        | seq(b"id").map(|_| Term::Id)
-        | seq(b"id0").map(|_| Term::Id0)
-        | ident().map(Term::TermRef)
+        | ws(seq(b"id")).map(|_| Term::Id)
+        | ws(seq(b"id0")).map(|_| Term::Id0)
+        | term_ref()
+}
+
+fn seq_<'a>() -> Parser<'a, u8, Term> {
+    list(ws(par_term()), ws(sym(b';'))).map(Term::Seq)
 }
 
 fn term<'a>() -> Parser<'a, u8, Term> {
-    par_term()
-        | list(ws(par_term()), sym(b';')).map(Term::Seq)
+    par_term() | seq_()
 }
 
 fn stmts<'a>() -> Parser<'a, u8, Vec<Stmt>> {

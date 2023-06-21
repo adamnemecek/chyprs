@@ -13,6 +13,18 @@ use std::collections::HashSet;
 
 // use regex::Regex;
 
+pub trait Tact<T> {
+    // type Iter: Iterator<Item = crate::prelude::Graph<T>>;
+    fn name(&self) -> &str;
+    // fn make_rhs(&self) -> Self::Iter;
+    fn make_rhs(&self) -> std::iter::FromFn<T>;
+    fn check(&self);
+}
+
+struct Test1<T> {
+    v: Vec<Box<dyn Tact<T>>>,
+}
+
 pub struct Tactic<'a, T> {
     // state: &'a mut state::State,
     // local_state: &'a mut state::RewriteState,
