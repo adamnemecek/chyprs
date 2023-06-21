@@ -386,35 +386,33 @@ impl<T> Graph<T> {
         fg: String,
         bg: String,
         hyper: bool,
+        name: impl Into<Option<usize>>,
     ) -> usize {
-        let index = self.eindex;
+        let e;
+        if let Some(name) = name.into() {
+            e = name;
+            self.eindex = name.max(self.eindex) + 1;
+        } else {
+            e = self.eindex;
+            self.eindex += 1;
+        }
+
+        for v in t.iter() {
+            let c = self.vdata.get_mut(&v).unwrap();
+            // c.in_edges.insert(*e);
+        }
+
+        for v in s.iter() {
+            let c = self.vdata.get_mut(&v).unwrap();
+            // c.out_edges.insert(*e);
+        }
+
         self.edata.insert(
-            index,
+            e,
             EData::new(s, t, value, x, y, fg, bg, hyper),
         );
-        self.eindex += 1;
 
-        // if let Some(s) = s {
-        //     for v in &s {
-        //         self.vdata
-        //             .get_mut(v)
-        //             .unwrap()
-        //             .out_edges
-        //             .insert(index);
-        //     }
-        // }
-
-        // if let Some(t) = t {
-        //     for v in &t {
-        //         self.vdata
-        //             .get_mut(v)
-        //             .unwrap()
-        //             .in_edges
-        //             .insert(index);
-        //     }
-        // }
-
-        index
+        e
     }
 
     fn set_inputs(&mut self, inputs: Vec<usize>) {
