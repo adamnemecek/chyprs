@@ -57,8 +57,8 @@ pub struct EData<T> {
 
 impl<T> EData<T> {
     fn new(
-        s: Option<Vec<usize>>,
-        t: Option<Vec<usize>>,
+        s: Vec<usize>,
+        t: Vec<usize>,
         value: T,
         x: f32,
         y: f32,
@@ -71,8 +71,10 @@ impl<T> EData<T> {
             highlight: false,
             x,
             y,
-            s: s.unwrap_or_else(|| vec![]),
-            t: t.unwrap_or_else(|| vec![]),
+            // s: s.unwrap_or_else(|| vec![]),
+            // t: t.unwrap_or_else(|| vec![]),
+            s,
+            t,
             fg,
             bg,
             hyper,
@@ -160,6 +162,7 @@ impl<T> Graph<T> {
             })
             .collect();
 
+        // g.add_edge()
         g.set_inputs(inputs);
         g.set_outputs(outputs);
 
@@ -360,36 +363,59 @@ impl<T> Graph<T> {
         unimplemented!()
     }
 
-    // fn add_edge(
-    //     &mut self,
-    //     s: Option<Vec<usize>>,
-    //     t: Option<Vec<usize>>,
-    //     value: T,
-    //     x: f32,
-    //     y: f32,
-    //     fg: String,
-    //     bg: String,
-    //     hyper: bool,
-    // ) -> usize {
-    //     let index = self.eindex;
-    //     self.edata
-    //         .insert(index, EData::new(s, t, value, x, y, fg, bg, hyper));
-    //     self.eindex += 1;
+    ///
+    /// Add an edge to the graph
+    ///
+    /// :param s:     A list of source vertices
+    /// :param t:     A list of target vertices
+    /// :param value: The value carried by this edge (typically a string)
+    /// :param x:     The X coordinate to draw the box representing this hyperedge
+    /// :param y:     The Y coordinate
+    /// :param hyper: This is a hint to tell the GUI how to draw this (hyper)edge. If set to
+    ///                 False, ideally it should be drawn simply as a line connected two vertices
+    ///                 rather than as a box. (Currently not implemented.)
+    /// :param name:  An optional name. If this is set to -1, set the name automatically.
+    ///
+    pub fn add_edge(
+        &mut self,
+        s: Vec<usize>,
+        t: Vec<usize>,
+        value: T,
+        x: f32,
+        y: f32,
+        fg: String,
+        bg: String,
+        hyper: bool,
+    ) -> usize {
+        let index = self.eindex;
+        self.edata.insert(
+            index,
+            EData::new(s, t, value, x, y, fg, bg, hyper),
+        );
+        self.eindex += 1;
 
-    //     if let Some(s) = s {
-    //         for v in &s {
-    //             self.vdata.get_mut(v).unwrap().out_edges.insert(index);
-    //         }
-    //     }
+        // if let Some(s) = s {
+        //     for v in &s {
+        //         self.vdata
+        //             .get_mut(v)
+        //             .unwrap()
+        //             .out_edges
+        //             .insert(index);
+        //     }
+        // }
 
-    //     if let Some(t) = t {
-    //         for v in &t {
-    //             self.vdata.get_mut(v).unwrap().in_edges.insert(index);
-    //         }
-    //     }
+        // if let Some(t) = t {
+        //     for v in &t {
+        //         self.vdata
+        //             .get_mut(v)
+        //             .unwrap()
+        //             .in_edges
+        //             .insert(index);
+        //     }
+        // }
 
-    //     index
-    // }
+        index
+    }
 
     fn set_inputs(&mut self, inputs: Vec<usize>) {
         self.inputs = inputs;
