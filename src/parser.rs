@@ -191,15 +191,13 @@ struct Color {
     // g: u8
 }
 
-fn hex_digit1<'a>() -> Parser<'a, u8, u8> {
-    is_a(hex_digit)
-}
+// fn hex_digit1<'a>() -> Parser<'a, u8, u8> {
+//     is_a(hex_digit)
+// }
 
 fn color<'a>() -> Parser<'a, u8, Color> {
-    is_a(|x: u8| x.is_ascii_hexdigit()).repeat(6).map(|x| {
-        Color {
-            s: String::from_utf8(x).unwrap(),
-        }
+    is_a(hex_digit).repeat(6).map(|x| Color {
+        s: String::from_utf8(x).unwrap(),
     })
 }
 
@@ -215,6 +213,11 @@ fn ident<'a>() -> Parser<'a, u8, String> {
         String::from_utf8(iter.collect()).unwrap()
     })
 }
+
+// fn int_from_slice(s: &[u8]) -> i64 {
+//     let z = String::from_utf8(x.to_owned();
+
+// }
 
 fn integer<'a>() -> Parser<'a, u8, i64> {
     let int = one_of(b"123456789")
@@ -363,6 +366,10 @@ fn term<'a>() -> Parser<'a, u8, Term> {
         | seq(b"id0").map(|_| Term::Id0)
 }
 
+fn stmts<'a>() -> Parser<'a, u8, Vec<Stmt>> {
+    list(ws(stmt()), ws(sym(b';')))
+}
+
 fn let_<'a>() -> Parser<'a, u8, Let> {
     (seq(b"let") * ws(ident()) - sym(b'=') + ws(term()))
         .map(|(var, term)| Let { var, term })
@@ -398,11 +405,13 @@ fn main1() {
 }
 
 pub fn parse_test() {
-    use std::fs::File;
-    use std::io::Read;
+    use std::{
+        fs::File,
+        io::Read,
+    };
 
     let mut f = File::open(
-        "/Users/adamnemecek/Code2/chyp/examples/hopf.chyp",
+        "/Users/adamnemecek/Code2/chyprs/hopf.chyp",
     )
     .unwrap();
 
@@ -410,6 +419,8 @@ pub fn parse_test() {
     f.read_to_string(&mut s).unwrap();
 
     println!("{:?}", s);
+
+    let s = parse(s.as_bytes(), stmts());
 }
 
 // fn parse<'a, T>(input: &'a str, parser: Parser<'a, char, T>) -> T {
