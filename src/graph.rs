@@ -134,11 +134,11 @@ impl<T> Graph<T> {
     ///
     /// :param p: A permutation, given as an n-element list of integers from 0 to n-1.
     ///
-    pub fn graph(v: Vec<usize>) -> Self {
+    pub fn perm(p: Vec<usize>) -> Self {
         let mut g = Self::new();
 
         // inputs = [g.add_vertex(0, i - (size-1)/2) for i in range(size)]
-        let l = v.len();
+        let l = p.len();
         let inputs: Vec<_> = (0..l)
             .map(|i| {
                 g.add_vertex(
@@ -150,9 +150,11 @@ impl<T> Graph<T> {
             })
             .collect();
 
-        // let outputs = (0)
+        let outputs: Vec<_> =
+            (0..l).map(|i| inputs[p[i]]).collect();
+
         g.set_inputs(inputs);
-        // g.set_outputs(vec![v]);
+        g.set_inputs(outputs);
         g
     }
 
