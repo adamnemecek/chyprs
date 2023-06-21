@@ -35,10 +35,10 @@ impl<T> Rule<T> {
         // })
     }
 
-    // pub fn copy(&self) -> Self {
+    // pub fn clone(&self) -> Self {
     //     Self {
-    //         lhs: self.lhs.copy(),
-    //         rhs: self.rhs.copy(),
+    //         lhs: self.lhs.clone(),
+    //         rhs: self.rhs.clone(),
     //         name: self.name.clone(),
     //         equiv: self.equiv,
     //     }
@@ -52,8 +52,8 @@ impl<T> Rule<T> {
         };
 
         // Self {
-        //     lhs: self.rhs.copy(),
-        //     rhs: self.lhs.copy(),
+        //     lhs: self.rhs.clone(),
+        //     rhs: self.lhs.clone(),
         //     name,
         //     equiv: true,
         // }

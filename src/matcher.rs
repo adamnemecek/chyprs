@@ -16,7 +16,7 @@ pub use crate::prelude::*;
 //     }
 // }
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub struct Match<'a, T: std::fmt::Debug + Eq> {
     dom: &'a Graph<T>,
     cod: &'a Graph<T>,
@@ -24,6 +24,20 @@ pub struct Match<'a, T: std::fmt::Debug + Eq> {
     vimg: HashSet<usize>,
     emap: HashMap<usize, usize>,
     eimg: HashSet<usize>,
+}
+
+// can we work around this?
+impl<'a, T: std::fmt::Debug + Eq> Clone for Match<'a, T> {
+    fn clone(&self) -> Self {
+        Self {
+            dom: self.dom,
+            cod: self.cod,
+            vmap: self.vmap.clone(),
+            vimg: self.vimg.clone(),
+            emap: self.emap.clone(),
+            eimg: self.eimg.clone(),
+        }
+    }
 }
 
 impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
@@ -244,28 +258,28 @@ impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
                     continue;
                 }
 
-                // for cod_e in self.cod.in_edges(cod_v) {
-                //     let mut m1 = self.clone();
-                //     if m1.try_add_edge(e, cod_e) {
-                //         ms.push(m1);
-                //     }
-                // }
+                for cod_e in self.cod.in_edges(cod_v) {
+                    let mut m1 = self.clone();
+                    if m1.try_add_edge(*e, *cod_e) {
+                        ms.push(m1);
+                    }
+                }
                 return ms;
             }
 
-            //     for e in self.dom.out_edges(*v) {
-            //         if self.emap.contains_key(&e) {
-            //             continue;
-            //         }
+            for e in self.dom.out_edges(*v) {
+                if self.emap.contains_key(&e) {
+                    continue;
+                }
 
-            //         for cod_e in self.cod.out_edges(cod_v) {
-            //             let mut m1 = self.copy();
-            //             if m1.try_add_edge(e, cod_e) {
-            //                 ms.push(m1);
-            //             }
-            //         }
-            //         return ms;
-            //     }
+                for cod_e in self.cod.out_edges(cod_v) {
+                    let mut m1 = self.clone();
+                    if m1.try_add_edge(*e, *cod_e) {
+                        ms.push(m1);
+                    }
+                }
+                return ms;
+            }
         }
 
         // for v in self.dom.vertices() {
