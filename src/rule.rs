@@ -6,7 +6,7 @@ use crate::prelude::Graph;
 #[derive(Debug)]
 pub struct RuleError;
 
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug)]
 pub struct Rule<T> {
     lhs: Graph<T>,
     rhs: Graph<T>,

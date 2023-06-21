@@ -42,16 +42,19 @@ impl<T> VData<T> {
     }
 }
 
-#[derive(Debug, Clone)]
+///
+/// The data assocaited with a single edge
+///
+#[derive(Clone, Debug)]
 pub struct EData<T> {
-    value: T,
+    value: Option<T>,
     highlight: bool,
     x: f32,
     y: f32,
     s: Vec<usize>,
     t: Vec<usize>,
-    fg: String,
-    bg: String,
+    fg: Option<String>,
+    bg: Option<String>,
     hyper: bool,
 }
 
@@ -59,20 +62,18 @@ impl<T> EData<T> {
     fn new(
         s: Vec<usize>,
         t: Vec<usize>,
-        value: T,
+        value: impl Into<Option<T>>,
         x: f32,
         y: f32,
-        fg: String,
-        bg: String,
+        fg: Option<String>,
+        bg: Option<String>,
         hyper: bool,
     ) -> Self {
         Self {
-            value,
+            value: value.into(),
             highlight: false,
             x,
             y,
-            // s: s.unwrap_or_else(|| vec![]),
-            // t: t.unwrap_or_else(|| vec![]),
             s,
             t,
             fg,
@@ -81,8 +82,8 @@ impl<T> EData<T> {
         }
     }
 
-    pub fn value(&self) -> &T {
-        &self.value
+    pub fn value(&self) -> Option<&T> {
+        self.value.as_ref()
     }
 
     pub fn s(&self) -> &Vec<usize> {
@@ -120,7 +121,7 @@ impl<T> EData<T> {
 /// which are used for sequential composition and rewriting.
 ///
 
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug)]
 pub struct Graph<T> {
     vdata: HashMap<usize, VData<T>>,
     edata: HashMap<usize, EData<T>>,
@@ -152,7 +153,7 @@ impl<T> Graph<T> {
     /// :param bg: An optional background color, given as a 6-digit RGB hex code
     ///
     pub fn gen<'a>(
-        value: impl Into<Option<&'a str>>,
+        value: impl Into<Option<T>>,
         arity: usize,
         coarity: usize,
         fg: impl Into<Option<&'a str>>,
@@ -180,7 +181,27 @@ impl<T> Graph<T> {
             })
             .collect();
 
-        // g.add_edge()
+        // &mut self,
+        // s: Vec<usize>,
+        // t: Vec<usize>,
+        // value: impl Into<Option<T>>,
+        // x: impl Into<Option<f32>>,
+        // y: impl Into<Option<f32>>,
+        // fg: String,
+        // bg: String,
+        // hyper: bool,
+        // name: impl Into<Option<usize>>,
+        g.add_edge(
+            inputs.clone(),
+            outputs.clone(),
+            value.into(),
+            None,
+            None,
+            fg,
+            bg,
+            None,
+            None,
+        );
         g.set_inputs(inputs);
         g.set_outputs(outputs);
 
@@ -394,16 +415,16 @@ impl<T> Graph<T> {
     ///                 rather than as a box. (Currently not implemented.)
     /// :param name:  An optional name. If this is set to -1, set the name automatically.
     ///
-    pub fn add_edge(
+    pub fn add_edge<'a>(
         &mut self,
         s: Vec<usize>,
         t: Vec<usize>,
-        value: T,
-        x: f32,
-        y: f32,
-        fg: String,
-        bg: String,
-        hyper: bool,
+        value: impl Into<Option<T>>,
+        x: impl Into<Option<f32>>,
+        y: impl Into<Option<f32>>,
+        fg: impl Into<Option<&'a str>>,
+        bg: impl Into<Option<&'a str>>,
+        hyper: impl Into<Option<bool>>,
         name: impl Into<Option<usize>>,
     ) -> usize {
         let e;
@@ -427,7 +448,16 @@ impl<T> Graph<T> {
 
         self.edata.insert(
             e,
-            EData::new(s, t, value, x, y, fg, bg, hyper),
+            EData::new(
+                s,
+                t,
+                value,
+                x.into().unwrap_or_default(),
+                y.into().unwrap_or_default(),
+                fg.into().map(|x| x.to_owned()),
+                bg.into().map(|x| x.to_owned()),
+                hyper.into().unwrap_or(true),
+            ),
         );
 
         e
