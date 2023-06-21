@@ -230,44 +230,43 @@ impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
     }
 
     pub fn more(&self) -> Vec<Self> {
-        unimplemented!()
-        // let mut ms: Vec<Match> = Vec::new();
+        let mut ms: Vec<Match<T>> = vec![];
 
-        // for v in self.vmap.keys() {
-        //     if self.dom_nhd_mapped(*v) {
-        //         continue;
-        //     }
+        for v in self.vmap.keys() {
+            if self.dom_nhd_mapped(*v) {
+                continue;
+            }
 
-        //     let cod_v = self.vmap[v];
+            let cod_v = self.vmap[v];
 
-        //     for e in self.dom.in_edges(*v) {
-        //         if self.emap.contains_key(&e) {
-        //             continue;
-        //         }
+            for e in self.dom.in_edges(*v) {
+                if self.emap.contains_key(&e) {
+                    continue;
+                }
 
-        //         for cod_e in self.cod.in_edges(cod_v) {
-        //             let mut m1 = self.copy();
-        //             if m1.try_add_edge(e, cod_e) {
-        //                 ms.push(m1);
-        //             }
-        //         }
-        //         return ms;
-        //     }
+                // for cod_e in self.cod.in_edges(cod_v) {
+                //     let mut m1 = self.clone();
+                //     if m1.try_add_edge(e, cod_e) {
+                //         ms.push(m1);
+                //     }
+                // }
+                return ms;
+            }
 
-        //     for e in self.dom.out_edges(*v) {
-        //         if self.emap.contains_key(&e) {
-        //             continue;
-        //         }
+            //     for e in self.dom.out_edges(*v) {
+            //         if self.emap.contains_key(&e) {
+            //             continue;
+            //         }
 
-        //         for cod_e in self.cod.out_edges(cod_v) {
-        //             let mut m1 = self.copy();
-        //             if m1.try_add_edge(e, cod_e) {
-        //                 ms.push(m1);
-        //             }
-        //         }
-        //         return ms;
-        //     }
-        // }
+            //         for cod_e in self.cod.out_edges(cod_v) {
+            //             let mut m1 = self.copy();
+            //             if m1.try_add_edge(e, cod_e) {
+            //                 ms.push(m1);
+            //             }
+            //         }
+            //         return ms;
+            //     }
+        }
 
         // for v in self.dom.vertices() {
         //     if self.vmap.contains_key(&v) {
@@ -284,6 +283,8 @@ impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
         // }
 
         // vec![]
+
+        unimplemented!()
     }
 
     pub fn is_total(&self) -> bool {
