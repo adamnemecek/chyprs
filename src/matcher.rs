@@ -191,43 +191,42 @@ impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
     }
 
     pub fn map_scalars(&mut self) -> bool {
-        // let mut cod_sc = vec![];
+        let mut cod_sc = vec![];
 
-        // for e in self.cod.edges() {
-        //     let ed = self.cod.edge_data(e);
-        //     if ed.s.is_empty() && ed.t.is_empty() {
-        //         cod_sc.push((e, ed.value));
-        //     }
-        // }
+        for e in self.cod.edges() {
+            let ed = self.cod.edge_data(*e);
+            if ed.s().is_empty() && ed.t().is_empty() {
+                cod_sc.push((e, ed.value()));
+            }
+        }
 
-        // for e in self.dom.edges() {
-        //     println!(!("trying to map scalar edge {}", e));
-        //     let ed = self.dom.edge_data(e);
-        //     if !ed.s.is_empty() || !ed.t.is_empty() {
-        //         continue;
-        //     }
+        for e in self.dom.edges() {
+            println!("trying to map scalar edge {}", e);
+            let ed = self.dom.edge_data(*e);
+            if !ed.s().is_empty() || !ed.t().is_empty() {
+                continue;
+            }
 
-        //     let mut found = false;
-        //     for i in 0..cod_sc.len() {
-        //         let (e1, val) = cod_sc[i];
-        //         if val == ed.value {
-        //             cod_sc.remove(i);
-        //             self.emap.insert(e, e1);
-        //             self.eimg.insert(e1);
-        //             found = true;
-        //             println!(!("successfully mapped scalar {} -> {}", e, e1));
-        //             break;
-        //         }
-        //     }
+            let mut found = false;
+            for i in 0..cod_sc.len() {
+                let (e1, val) = cod_sc[i];
+                if val == ed.value() {
+                    cod_sc.remove(i);
+                    self.emap.insert(*e, *e1);
+                    self.eimg.insert(*e1);
+                    found = true;
+                    println!("successfully mapped scalar {} -> {}", e, e1);
+                    break;
+                }
+            }
 
-        //     if !found {
-        //         println!(!("match failed: could not map scalar edge {}", e));
-        //         return false;
-        //     }
-        // }
+            if !found {
+                println!("match failed: could not map scalar edge {}", e);
+                return false;
+            }
+        }
 
-        // true
-        unimplemented!()
+        true
     }
 
     pub fn more(&self) -> Vec<Self> {

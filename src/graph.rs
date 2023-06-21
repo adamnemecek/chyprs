@@ -79,6 +79,15 @@ impl<T> EData<T> {
         &self.value
     }
 
+    pub fn s(&self) -> &Vec<usize> {
+        &self.s
+    }
+
+    pub fn t(&self) -> &Vec<usize> {
+        &self.t
+    }
+
+
     fn box_size(&self) -> usize {
         if self.s.len() <= 1 && self.t.len() <= 1 {
             1
