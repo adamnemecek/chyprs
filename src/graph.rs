@@ -1,6 +1,7 @@
 use std::collections::{
     HashMap,
     HashSet,
+    VecDeque,
 };
 use std::iter::Iterator;
 
@@ -181,16 +182,6 @@ impl<T> Graph<T> {
             })
             .collect();
 
-        // &mut self,
-        // s: Vec<usize>,
-        // t: Vec<usize>,
-        // value: impl Into<Option<T>>,
-        // x: impl Into<Option<f32>>,
-        // y: impl Into<Option<f32>>,
-        // fg: String,
-        // bg: String,
-        // hyper: bool,
-        // name: impl Into<Option<usize>>,
         g.add_edge(
             inputs.clone(),
             outputs.clone(),
@@ -364,7 +355,20 @@ impl<T> Graph<T> {
         &self,
         vs: impl Iterator<Item = usize>,
     ) -> HashSet<usize> {
-        unimplemented!()
+        let mut succ = HashSet::default();
+
+        let mut current = VecDeque::from_iter(vs);
+
+        while let Some(v) = current.pop_front() {
+            for e in self.out_edges(v) {
+                for v1 in self.target(*e) {
+                    current.push_back(*e);
+                    succ.insert(*v1);
+                }
+            }
+        }
+
+        succ
     }
 
     pub fn merge_vertices(&self, v: usize, w: usize) {
