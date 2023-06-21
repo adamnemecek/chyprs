@@ -291,20 +291,6 @@ fn stmt<'a>() -> Parser<'a, u8, Stmt> {
         | show().map(Stmt::Show)
 }
 
-//  rule unitL : u * id ; m = id
-fn rule<'a>() -> Parser<'a, u8, Rule> {
-    (seq(b"rule") * ws(ident()) - sym(b':')
-        + ws(term())
-        + op()
-        + ws(term()))
-    .map(|(((var, lhs), op), rhs)| Rule {
-        var,
-        lhs,
-        op,
-        rhs,
-    })
-}
-
 fn integer_list<'a>() -> Parser<'a, u8, Vec<i64>> {
     sym(b'[') * list(ws(integer()), sym(b',')) - sym(b']')
 }
@@ -379,6 +365,7 @@ fn term_ref<'a>() -> Parser<'a, u8, Term> {
 }
 
 fn par_term<'a>() -> Parser<'a, u8, Term> {
+    println!("par_term");
     ws(parens(ws(term())))
         | par()
         | perm().map(Term::Perm)
@@ -388,11 +375,28 @@ fn par_term<'a>() -> Parser<'a, u8, Term> {
 }
 
 fn seq_<'a>() -> Parser<'a, u8, Term> {
+    println!("seq");
     list(ws(par_term()), ws(sym(b';'))).map(Term::Seq)
 }
 
 fn term<'a>() -> Parser<'a, u8, Term> {
-    par_term() | seq_()
+    println!("term");
+    seq_() | par_term()
+}
+
+//  rule unitL : u * id ; m = id
+fn rule<'a>() -> Parser<'a, u8, Rule> {
+    println!("rule");
+    (seq(b"rule") * ws(ident()) - sym(b':')
+        + ws(term())
+        + op()
+        + ws(term()))
+    .map(|(((var, lhs), op), rhs)| Rule {
+        var,
+        lhs,
+        op,
+        rhs,
+    })
 }
 
 fn stmts<'a>() -> Parser<'a, u8, Vec<Stmt>> {

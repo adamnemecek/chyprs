@@ -17,7 +17,7 @@ pub use crate::prelude::*;
 // }
 
 #[derive(Clone, Debug)]
-pub struct Match<'a, T> {
+pub struct Match<'a, T: std::fmt::Debug + Eq> {
     dom: &'a Graph<T>,
     cod: &'a Graph<T>,
     vmap: HashMap<usize, usize>,
@@ -26,7 +26,7 @@ pub struct Match<'a, T> {
     eimg: HashSet<usize>,
 }
 
-impl<'a, T> Match<'a, T> {
+impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
     pub fn new(
         dom: &'a Graph<T>,
         cod: &'a Graph<T>,
@@ -57,13 +57,16 @@ impl<'a, T> Match<'a, T> {
             return self.vmap[&v] == cod_v;
         }
 
-        // let v_val = self.dom.vertex_data(v).value;
-        // let cod_v_val = self.cod.vertex_data(cod_v).value;
+        let v_val = self.dom.vertex_data(v).value();
+        let cod_v_val = self.cod.vertex_data(cod_v).value();
 
-        // if v_val != cod_v_val {
-        //     println!(!("vertex failed: values {} != {}", v_val, cod_v_val));
-        //     return false;
-        // }
+        if v_val != cod_v_val {
+            println!(
+                "vertex failed: values {:?} != {:?}",
+                v_val, cod_v_val
+            );
+            return false;
+        }
 
         // if self.cod.is_boundary(cod_v) && !self.dom.is_boundary(v) {
         //     match_log("vertex failed: cod v is boundary but dom v is not");
@@ -320,14 +323,14 @@ impl<'a, T> Match<'a, T> {
 
 use std::collections::VecDeque;
 
-pub struct Matches<'a, T> {
+pub struct Matches<'a, T: Eq + std::fmt::Debug> {
     dom: &'a Graph<T>,
     cod: &'a Graph<T>,
     convex: bool,
     match_stack: VecDeque<Match<'a, T>>,
 }
 
-impl<'a, T> Matches<'a, T> {
+impl<'a, T: Eq + std::fmt::Debug> Matches<'a, T> {
     pub fn new(
         dom: &'a Graph<T>,
         cod: &'a Graph<T>,
@@ -352,7 +355,9 @@ impl<'a, T> Matches<'a, T> {
     }
 }
 
-impl<'a, T> Iterator for Matches<'a, T> {
+impl<'a, T: Eq + std::fmt::Debug> Iterator
+    for Matches<'a, T>
+{
     type Item = Match<'a, T>;
 
     fn next(&mut self) -> Option<Self::Item> {

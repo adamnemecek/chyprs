@@ -32,6 +32,10 @@ impl<T> VData<T> {
             out_indices: HashSet::new(),
         }
     }
+
+    pub fn value(&self) -> &T {
+        &self.value
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -129,15 +133,14 @@ impl<T> Graph<T> {
         self.edata.len()
     }
 
-    pub fn vertex_data(
-        &self,
-        v: usize,
-    ) -> Option<&VData<T>> {
-        self.vdata.get(&v)
+    pub fn vertex_data(&self, v: usize) -> &VData<T> {
+        // self.vdata.get(&v)
+        &self.vdata[&v]
     }
 
-    pub fn edge_data(&self, e: usize) -> Option<&EData<T>> {
-        self.edata.get(&e)
+    pub fn edge_data(&self, e: usize) -> &EData<T> {
+        // self.edata.get(&e)
+        &self.edata[&e]
     }
 
     pub fn in_edges(
