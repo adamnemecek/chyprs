@@ -204,6 +204,7 @@ fn color<'a>() -> Parser<'a, u8, Color> {
 fn gen_colors<'a>() -> Parser<'a, u8, Vec<Color>> {
     color().repeat(0..)
 }
+
 fn ident<'a>() -> Parser<'a, u8, String> {
     (is_a(alpha_or_underscore)
         + is_a(alphanum_or_underscore).repeat(0..))
@@ -229,7 +230,8 @@ fn integer<'a>() -> Parser<'a, u8, i64> {
 }
 
 fn gen<'a>() -> Parser<'a, u8, Gen> {
-    (seq(b"gen") * ws(ident()) - sym(b':') + ws(integer())
+    ws(seq(b"gen") * ws(ident()) - sym(b':')
+        + ws(integer())
         - seq(b"->")
         + ws(integer())
         + gen_colors().opt())
@@ -239,7 +241,6 @@ fn gen<'a>() -> Parser<'a, u8, Gen> {
         to,
         colors: colors.unwrap_or_else(|| vec![]),
     })
-    // unimplemented!()
 }
 
 fn import<'a>() -> Parser<'a, u8, Import> {
@@ -279,8 +280,9 @@ fn show<'a>() -> Parser<'a, u8, Show> {
 }
 
 fn stmt<'a>() -> Parser<'a, u8, Stmt> {
-    import().map(Stmt::Import)
-        | gen().map(Stmt::Gen)
+    // import().map(Stmt::Import)
+
+    gen().map(Stmt::Gen)
         | let_().map(Stmt::Let)
         | def().map(Stmt::Def)
         | rule().map(Stmt::Rule)
@@ -317,6 +319,7 @@ fn perm<'a>() -> Parser<'a, u8, Vec<i64>> {
 enum Term {
     // ParTerm(Box<Self>),
     // Seq(Box<Self>, Box<Self>),
+    Seq(Vec<Term>),
     Par(Box<Self>, Box<Self>),
     Perm(Vec<i64>),
     Id,
@@ -357,13 +360,23 @@ fn parens<'a, T: 'a>(
     sym(b'(') * p - sym(b')')
 }
 
-fn term<'a>() -> Parser<'a, u8, Term> {
+fn par<'a>() -> Parser<'a, u8, Term> {
+    (ws(term()) - sym(b'*') + ws(term()))
+        .map(|(a, b)| Term::Par(a.into(), b.into()))
+}
+
+fn par_term<'a>() -> Parser<'a, u8, Term> {
     parens(term())
-        | (ws(term()) - sym(b'*') + ws(term()))
-            .map(|(a, b)| Term::Par(a.into(), b.into()))
+        | par()
         | perm().map(Term::Perm)
         | seq(b"id").map(|_| Term::Id)
         | seq(b"id0").map(|_| Term::Id0)
+        | ident().map(Term::TermRef)
+}
+
+fn term<'a>() -> Parser<'a, u8, Term> {
+    par_term()
+        | list(ws(par_term()), sym(b';')).map(Term::Seq)
 }
 
 fn stmts<'a>() -> Parser<'a, u8, Vec<Stmt>> {
@@ -428,11 +441,22 @@ mod tests {
     use super::{
         gen,
         parse,
+        rule,
     };
     #[test]
     fn test_gen() {
         //
-        let g = parse("gen m : 2 -> 1".as_bytes(), gen());
+        let g = parse(" gen m : 2 -> 1 ".as_bytes(), gen());
+        println!("{:?}", g);
+    }
+
+    #[test]
+    fn test_rule() {
+        //
+        let g = parse(
+            " rule unitL : u * id ; m = id ".as_bytes(),
+            rule(),
+        );
         println!("{:?}", g);
     }
 }
