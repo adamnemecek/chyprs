@@ -75,6 +75,10 @@ impl<T> EData<T> {
         }
     }
 
+    pub fn value(&self) -> &T {
+        &self.value
+    }
+
     fn box_size(&self) -> usize {
         if self.s.len() <= 1 && self.t.len() <= 1 {
             1

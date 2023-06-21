@@ -93,6 +93,9 @@ impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
         self.vmap.insert(v, cod_v);
         self.vimg.insert(cod_v);
 
+        // # unless v is a boundary, check that nhd(v) and nhd(vmap(v)) are the same size. Because
+        // # matchings are required to be injective on edges, this will guarantee that the gluing
+        // # conditions are satisfied.
         if !self.dom.is_boundary(v) {
             if self.dom.in_edges(v).len()
                 != self.cod.in_edges(cod_v).len()
@@ -108,9 +111,8 @@ impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
             }
         }
 
-        // match_log("vertex success");
-        // true
-        unimplemented!()
+        println!("vertex success");
+        true
     }
 
     pub fn try_add_edge(
@@ -118,31 +120,30 @@ impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
         e: usize,
         cod_e: usize,
     ) -> bool {
-        // println!(!(
-        //     "trying to add edge {} -> {} to match:",
-        //     e, cod_e
-        // ));
+        println!(
+            "trying to add edge {:?} -> {:?} to match:",
+            e, cod_e
+        );
         // println!(!("{:?}", self));
 
-        // let e_val = self.dom.edge_data(e).value;
-        // let cod_e_val =
-        //     self.cod.edge_data(cod_e).value;
+        let e_val = self.dom.edge_data(e).value();
+        let cod_e_val = self.cod.edge_data(cod_e).value();
 
-        // if e_val != cod_e_val {
-        //     println!(!(
-        //         "edge failed: values {} != {}",
-        //         e_val, cod_e_val
-        //     ));
-        //     return false;
-        // }
+        if e_val != cod_e_val {
+            println!(
+                "edge failed: values {:?} != {:?}",
+                e_val, cod_e_val
+            );
+            return false;
+        }
 
-        // if self.eimg.contains(&cod_e) {
-        //     match_log("edge failed: non-injective");
-        //     return false;
-        // }
+        if self.eimg.contains(&cod_e) {
+            println!("edge failed: non-injective");
+            return false;
+        }
 
-        // self.emap.insert(e, cod_e);
-        // self.eimg.insert(cod_e);
+        self.emap.insert(e, cod_e);
+        self.eimg.insert(cod_e);
 
         // let s = self.dom.source(e);
         // let cod_s = self.cod.source(cod_e);
