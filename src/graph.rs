@@ -9,7 +9,7 @@ struct GraphError;
 
 #[derive(Clone, Debug)]
 pub struct VData<T> {
-    value: T,
+    value: Option<T>,
     x: f32,
     y: f32,
     highlight: bool,
@@ -20,9 +20,13 @@ pub struct VData<T> {
 }
 
 impl<T> VData<T> {
-    fn new(x: f32, y: f32, value: T) -> Self {
+    fn new(
+        x: f32,
+        y: f32,
+        value: impl Into<Option<T>>,
+    ) -> Self {
         Self {
-            value,
+            value: value.into(),
             x,
             y,
             highlight: false,
@@ -33,8 +37,8 @@ impl<T> VData<T> {
         }
     }
 
-    pub fn value(&self) -> &T {
-        &self.value
+    pub fn value(&self) -> Option<&T> {
+        self.value.as_ref()
     }
 }
 
@@ -116,6 +120,12 @@ impl<T> Graph<T> {
             vindex: 0,
             eindex: 0,
         }
+    }
+
+    pub fn identity() -> Self {
+        let mut s = Self::new();
+        // s.add_vertex(0, 0, value)
+        s
     }
 
     // fn copy(&self) -> Self {
