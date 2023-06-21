@@ -145,49 +145,49 @@ impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
         self.emap.insert(e, cod_e);
         self.eimg.insert(cod_e);
 
-        // let s = self.dom.source(e);
-        // let cod_s = self.cod.source(cod_e);
-        // let t = self.dom.target(e);
-        // let cod_t = self.cod.target(cod_e);
+        let s = self.dom.source(e);
+        let cod_s = self.cod.source(cod_e);
+        let t = self.dom.target(e);
+        let cod_t = self.cod.target(cod_e);
 
-        // if s.len() != cod_s.len() || t.len() != cod_t.len()
-        // {
-        //     match_log("edge failed: source or target len doesn't match image");
-        //     return false;
-        // }
+        if s.len() != cod_s.len() || t.len() != cod_t.len()
+        {
+            println!("edge failed: source or target len doesn't match image");
+            return false;
+        }
 
-        // for (v1, cod_v1) in s
-        //     .iter()
-        //     .chain(t.iter())
-        //     .zip(cod_s.iter().chain(cod_t.iter()))
-        // {
-        //     if self.vmap.contains_key(v1) {
-        //         if self.vmap[v1] != *cod_v1 {
-        //             match_log("edge failed: inconsistent with previously mapped vertex");
-        //             return false;
-        //         }
-        //     } else {
-        //         if !self.try_add_vertex(*v1, *cod_v1) {
-        //             match_log("edge failed: couldn't add a vertex");
-        //             return false;
-        //         }
-        //     }
-        // }
+        for (v1, cod_v1) in s
+            .iter()
+            .chain(t.iter())
+            .zip(cod_s.iter().chain(cod_t.iter()))
+        {
+            if self.vmap.contains_key(v1) {
+                if self.vmap[v1] != *cod_v1 {
+                    println!("edge failed: inconsistent with previously mapped vertex");
+                    return false;
+                }
+            } else {
+                if !self.try_add_vertex(*v1, *cod_v1) {
+                    println!("edge failed: couldn't add a vertex");
+                    return false;
+                }
+            }
+        }
 
-        // match_log("edge success");
-        // true
-        unimplemented!()
+        println!("edge success");
+        true
     }
 
     pub fn dom_nhd_mapped(&self, v: usize) -> bool {
-        // self.dom
-        //     .in_edges(v)
-        //     .all(|e| self.emap.contains_key(&e))
-        //     && self
-        //         .dom
-        //         .out_edges(v)
-        //         .all(|e| self.emap.contains_key(&e))
-        unimplemented!()
+        self.dom
+            .in_edges(v)
+            .iter()
+            .all(|e| self.emap.contains_key(&e))
+            && self
+                .dom
+                .out_edges(v)
+                .iter()
+                .all(|e| self.emap.contains_key(&e))
     }
 
     pub fn map_scalars(&mut self) -> bool {

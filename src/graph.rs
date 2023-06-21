@@ -166,6 +166,14 @@ impl<T> Graph<T> {
         &self.vdata[&v].out_indices
     }
 
+    pub fn source(&self, e: usize) -> &Vec<usize> {
+        unimplemented!()
+    }
+
+    pub fn target(&self, e: usize) -> &Vec<usize> {
+        unimplemented!()
+    }
+
     pub fn set_vertex_data(
         &mut self,
         v: usize,
