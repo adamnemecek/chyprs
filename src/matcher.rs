@@ -282,23 +282,21 @@ impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
             }
         }
 
-        // for v in self.dom.vertices() {
-        //     if self.vmap.contains_key(&v) {
-        //         continue;
-        //     }
+        for v in self.dom.vertices() {
+            if self.vmap.contains_key(&v) {
+                continue;
+            }
 
-        //     for cod_v in self.cod.vertices() {
-        //         let mut m1 = self.copy();
-        //         if m1.try_add_vertex(v, cod_v) {
-        //             ms.push(m1);
-        //         }
-        //     }
-        //     return ms;
-        // }
+            for cod_v in self.cod.vertices() {
+                let mut m1 = self.clone();
+                if m1.try_add_vertex(*v, *cod_v) {
+                    ms.push(m1);
+                }
+            }
+            return ms;
+        }
 
-        // vec![]
-
-        unimplemented!()
+        vec![]
     }
 
     pub fn is_total(&self) -> bool {
@@ -316,31 +314,28 @@ impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
     }
 
     pub fn is_convex(&self) -> bool {
-        unimplemented!()
-        // if !self.is_injective() {
-        //     return false;
-        // }
+        if !self.is_injective() {
+            return false;
+        }
 
-        // let future: HashSet<_> = self
-        //     .cod
-        //     .successors(
-        //         self.dom
-        //             .outputs()
-        //             .iter()
-        //             .filter(|v| self.vmap.contains_key(v))
-        //             .map(|v| self.vmap[v]),
-        //     )
-        //     .collect();
+        let future: HashSet<_> = self.cod.successors(
+            self.dom
+                .outputs()
+                .iter()
+                .filter(|v| self.vmap.contains_key(v))
+                .map(|v| self.vmap[v]),
+        );
+        // .collect();
 
-        // for v in self.dom.inputs() {
-        //     if let Some(cod_v) = self.vmap.get(&v) {
-        //         if future.contains(cod_v) {
-        //             return false;
-        //         }
-        //     }
-        // }
+        for v in self.dom.inputs() {
+            if let Some(cod_v) = self.vmap.get(&v) {
+                if future.contains(cod_v) {
+                    return false;
+                }
+            }
+        }
 
-        // true
+        true
     }
 }
 

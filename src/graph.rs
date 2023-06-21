@@ -87,7 +87,6 @@ impl<T> EData<T> {
         &self.t
     }
 
-
     fn box_size(&self) -> usize {
         if self.s.len() <= 1 && self.t.len() <= 1 {
             1
@@ -301,6 +300,14 @@ impl<T> Graph<T> {
 
     fn set_outputs(&mut self, outputs: Vec<usize>) {
         self.outputs = outputs;
+    }
+
+    pub fn inputs(&self) -> &Vec<usize> {
+        unimplemented!()
+    }
+
+    pub fn outputs(&self) -> &Vec<usize> {
+        unimplemented!()
     }
 
     // // fn out_edges(&self, v: usize) -> Option<&.
