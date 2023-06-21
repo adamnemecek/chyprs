@@ -230,7 +230,7 @@ fn integer<'a>() -> Parser<'a, u8, i64> {
 
 fn gen<'a>() -> Parser<'a, u8, Gen> {
     (seq(b"gen") * ws(ident()) - sym(b':') + ws(integer())
-        - seq(b"~>")
+        - seq(b"->")
         + ws(integer())
         + gen_colors().opt())
     .map(|(((name, from), to), colors)| Gen {
@@ -421,6 +421,20 @@ pub fn parse_test() {
     println!("{:?}", s);
 
     let s = parse(s.as_bytes(), stmts());
+}
+
+// #[tests]
+mod tests {
+    use super::{
+        gen,
+        parse,
+    };
+    #[test]
+    fn test_gen() {
+        //
+        let g = parse("gen m : 2 -> 1".as_bytes(), gen());
+        println!("{:?}", g);
+    }
 }
 
 // fn parse<'a, T>(input: &'a str, parser: Parser<'a, char, T>) -> T {
