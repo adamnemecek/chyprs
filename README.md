@@ -1,12 +1,3 @@
-git touch rewrite.rs
-git touch state.rs
-git touch rule.rs
-git touch scraps.rs
-git touch parser.rs
-git touch layout.rs
-git touch term.rs
-git touch matcher.rs
-git touch tactic/ruletac.rs
-git touch tactic/simptac.rs
-git touch graph.rs
-git touch tactic/mod.rs
+This is a port of https://github.com/akissinger/chyp to rust. 
+
+The UI will eventually be in svelte and via wasm compiled to a static website.
