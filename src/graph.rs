@@ -92,7 +92,12 @@ impl<T> EData<T> {
     pub fn t(&self) -> &Vec<usize> {
         &self.t
     }
-
+    ///
+    /// Returns the number of 'units' of width the box should have to display nicely.
+    ///
+    /// The simple rule is if both inputs and outputs are <= 1, draw as a small (size 1) box, otherwise
+    /// draw as a larger (size 2) box.
+    ///
     fn box_size(&self) -> usize {
         if self.s.len() <= 1 && self.t.len() <= 1 {
             1
@@ -101,6 +106,19 @@ impl<T> EData<T> {
         }
     }
 }
+
+///
+/// A hypergraph with boundaries
+///
+/// This is the main data structure used by Chyp. It represents a directed hypergraph (which we call simply a "graph")
+/// as two dictionaries for vertices and (hyper)edges, respectively. Each vertex is associated with a `VData`
+/// object and edge edge with an `EData` object, which stores information about adjacency, position, label,
+/// etc.
+///
+/// The particular flavor of hypergraphs we use associate to each hyperedge a list of source vertices and a list
+/// of target vertices. The hypergraph itself also has a list of input vertices and a list of output vertices,
+/// which are used for sequential composition and rewriting.
+///
 
 #[derive(Debug, Clone)]
 pub struct Graph<T> {
@@ -399,12 +417,12 @@ impl<T> Graph<T> {
 
         for v in t.iter() {
             let c = self.vdata.get_mut(&v).unwrap();
-            // c.in_edges.insert(*e);
+            c.in_edges.insert(e);
         }
 
         for v in s.iter() {
             let c = self.vdata.get_mut(&v).unwrap();
-            // c.out_edges.insert(*e);
+            c.out_edges.insert(e);
         }
 
         self.edata.insert(
