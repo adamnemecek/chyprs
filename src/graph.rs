@@ -195,6 +195,63 @@ impl<T> Graph<T> {
         index
     }
 
+    pub fn is_input(&self, v: usize) -> bool {
+        unimplemented!()
+        //
+    }
+
+    pub fn is_output(&self, v: usize) -> bool {
+        unimplemented!()
+        //
+    }
+
+    pub fn is_boundary(&self, v: usize) -> bool {
+        self.is_input(v) || self.is_output(v)
+        //
+    }
+
+    pub fn successors(
+        &self,
+        vs: impl Iterator<Item = usize>,
+    ) -> HashSet<usize> {
+        unimplemented!()
+    }
+
+    pub fn merge_vertices(&self, v: usize, w: usize) {
+        unimplemented!()
+    }
+
+    pub fn explode_vertex(
+        &self,
+        v: usize,
+    ) -> (Vec<usize>, Vec<usize>) {
+        unimplemented!()
+    }
+
+    pub fn insert_id_after(
+        &self,
+        v: usize,
+        reverse: bool,
+    ) -> usize {
+        unimplemented!()
+    }
+
+    pub fn tensor(&self, other: Self) {
+        unimplemented!()
+    }
+
+    pub fn compose(&self, other: Self) {
+        unimplemented!()
+    }
+
+    pub fn highlight(
+        &mut self,
+        vertices: HashSet<usize>,
+        edges: HashSet<usize>,
+    ) {
+        unimplemented!()
+    }
+
     // fn add_edge(
     //     &mut self,
     //     s: Option<Vec<usize>>,

@@ -68,10 +68,10 @@ impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
             return false;
         }
 
-        // if self.cod.is_boundary(cod_v) && !self.dom.is_boundary(v) {
-        //     match_log("vertex failed: cod v is boundary but dom v is not");
-        //     return false;
-        // }
+        if self.cod.is_boundary(cod_v) && !self.dom.is_boundary(v) {
+            println!("vertex failed: cod v is boundary but dom v is not");
+            return false;
+        }
 
         // if self.vimg.contains(&cod_v) {
         //     if !self.dom.is_boundary(v) {
