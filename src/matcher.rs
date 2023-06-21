@@ -68,26 +68,30 @@ impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
             return false;
         }
 
-        if self.cod.is_boundary(cod_v) && !self.dom.is_boundary(v) {
+        if self.cod.is_boundary(cod_v)
+            && !self.dom.is_boundary(v)
+        {
             println!("vertex failed: cod v is boundary but dom v is not");
             return false;
         }
 
-        // if self.vimg.contains(&cod_v) {
-        //     if !self.dom.is_boundary(v) {
-        //         match_log("vertex failed: non-injective on interior vertex");
-        //         return false;
-        //     }
-        //     for (dv, cv) in self.vmap.iter() {
-        //         if cv == &cod_v && !self.dom.is_boundary(*dv) {
-        //             match_log("vertex failed: non-injective on interior vertex");
-        //             return false;
-        //         }
-        //     }
-        // }
+        if self.vimg.contains(&cod_v) {
+            if !self.dom.is_boundary(v) {
+                println!("vertex failed: non-injective on interior vertex");
+                return false;
+            }
+            for (dv, cv) in self.vmap.iter() {
+                if cv == &cod_v
+                    && !self.dom.is_boundary(*dv)
+                {
+                    println!("vertex failed: non-injective on interior vertex");
+                    return false;
+                }
+            }
+        }
 
-        // self.vmap.insert(v, cod_v);
-        // self.vimg.insert(cod_v);
+        self.vmap.insert(v, cod_v);
+        self.vimg.insert(cod_v);
 
         // if !self.dom.is_boundary(v) {
         //     if self.dom.in_edges(v).count() != self.cod.in_edges(cod_v).count() {
