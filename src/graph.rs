@@ -131,14 +131,39 @@ impl<T> Graph<T> {
     /// :param fg: An optional foregraph color, given as a 6-digit RGB hex code
     /// :param bg: An optional background color, given as a 6-digit RGB hex code
     ///
-    pub fn gen(
-        value: &str,
+    pub fn gen<'a>(
+        value: impl Into<Option<&'a str>>,
         arity: usize,
         coarity: usize,
-        fg: &str,
-        bg: &str,
+        fg: impl Into<Option<&'a str>>,
+        bg: impl Into<Option<&'a str>>,
     ) -> Self {
-        unimplemented!()
+        let mut g = Self::new();
+
+        let inputs: Vec<_> = (0..arity)
+            .map(|i| {
+                g.add_vertex(
+                    -1.5,
+                    i as f32 - (arity as f32 - 1.0) / 2.0,
+                    None,
+                )
+            })
+            .collect();
+
+        let outputs: Vec<_> = (0..coarity)
+            .map(|i| {
+                g.add_vertex(
+                    1.5,
+                    i as f32 - (coarity as f32 - 1.0) / 2.0,
+                    None,
+                )
+            })
+            .collect();
+
+        g.set_inputs(inputs);
+        g.set_outputs(outputs);
+
+        g
     }
 
     ///
