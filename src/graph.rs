@@ -135,7 +135,25 @@ impl<T> Graph<T> {
     /// :param p: A permutation, given as an n-element list of integers from 0 to n-1.
     ///
     pub fn graph(v: Vec<usize>) -> Self {
-        unimplemented!()
+        let mut g = Self::new();
+
+        // inputs = [g.add_vertex(0, i - (size-1)/2) for i in range(size)]
+        let l = v.len();
+        let inputs: Vec<_> = (0..l)
+            .map(|i| {
+                g.add_vertex(
+                    0.0,
+                    i as f32
+                        - (l as f32 - 1.0) / 2.0 as f32,
+                    None,
+                )
+            })
+            .collect();
+
+        // let outputs = (0)
+        g.set_inputs(inputs);
+        // g.set_outputs(vec![v]);
+        g
     }
 
     pub fn identity() -> Self {
