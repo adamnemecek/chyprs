@@ -362,8 +362,10 @@ impl<T> Graph<T> {
         while let Some(v) = current.pop_front() {
             for e in self.out_edges(v) {
                 for v1 in self.target(*e) {
-                    current.push_back(*e);
-                    succ.insert(*v1);
+                    if !succ.contains(v1) {
+                        current.push_back(*e);
+                        succ.insert(*v1);
+                    }
                 }
             }
         }
