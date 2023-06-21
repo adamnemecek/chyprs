@@ -93,16 +93,20 @@ impl<'a, T: std::fmt::Debug + Eq> Match<'a, T> {
         self.vmap.insert(v, cod_v);
         self.vimg.insert(cod_v);
 
-        // if !self.dom.is_boundary(v) {
-        //     if self.dom.in_edges(v).count() != self.cod.in_edges(cod_v).count() {
-        //         match_log("vertex failed: in_edges cannot satisfy gluing conds");
-        //         return false;
-        //     }
-        //     if self.dom.out_edges(v).count() != self.cod.out_edges(cod_v).count() {
-        //         match_log("vertex failed: out_edges cannot satisfy gluing conds");
-        //         return false;
-        //     }
-        // }
+        if !self.dom.is_boundary(v) {
+            if self.dom.in_edges(v).len()
+                != self.cod.in_edges(cod_v).len()
+            {
+                println!("vertex failed: in_edges cannot satisfy gluing conds");
+                return false;
+            }
+            if self.dom.out_edges(v).len()
+                != self.cod.out_edges(cod_v).len()
+            {
+                println!("vertex failed: out_edges cannot satisfy gluing conds");
+                return false;
+            }
+        }
 
         // match_log("vertex success");
         // true

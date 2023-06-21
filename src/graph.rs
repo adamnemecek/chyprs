@@ -143,32 +143,23 @@ impl<T> Graph<T> {
         &self.edata[&e]
     }
 
-    pub fn in_edges(
-        &self,
-        v: usize,
-    ) -> Option<&HashSet<usize>> {
-        self.vdata.get(&v).map(|data| &data.in_edges)
+    pub fn in_edges(&self, v: usize) -> &HashSet<usize> {
+        // self.vdata.get(&v).map(|data| &data.in_edges)
+        &self.vdata[&v].in_edges
     }
 
-    pub fn out_edges(
-        &self,
-        v: usize,
-    ) -> Option<&HashSet<usize>> {
-        self.vdata.get(&v).map(|data| &data.out_edges)
+    pub fn out_edges(&self, v: usize) -> &HashSet<usize> {
+        // self.vdata.get(&v).map(|data| &data.out_edges)
+        &self.vdata[&v].out_edges
     }
 
-    pub fn in_indices(
-        &self,
-        v: usize,
-    ) -> Option<&HashSet<usize>> {
-        self.vdata.get(&v).map(|data| &data.in_indices)
+    pub fn in_indices(&self, v: usize) -> &HashSet<usize> {
+        &self.vdata[&v].in_indices
     }
 
-    pub fn out_indices(
-        &self,
-        v: usize,
-    ) -> Option<&HashSet<usize>> {
-        self.vdata.get(&v).map(|data| &data.out_indices)
+    pub fn out_indices(&self, v: usize) -> &HashSet<usize> {
+        // self.vdata.get(&v).map(|data| &data.out_indices)
+        &self.vdata[&v].out_indices
     }
 
     pub fn set_vertex_data(
