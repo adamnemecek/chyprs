@@ -392,9 +392,24 @@ fn test_integer_list() {
     ));
 }
 
-fn main() {
+fn main1() {
     // test_int();
     test_integer_list();
+}
+
+pub fn parse_test() {
+    use std::fs::File;
+    use std::io::Read;
+
+    let mut f = File::open(
+        "/Users/adamnemecek/Code2/chyp/examples/hopf.chyp",
+    )
+    .unwrap();
+
+    let mut s = String::new();
+    f.read_to_string(&mut s).unwrap();
+
+    println!("{:?}", s);
 }
 
 // fn parse<'a, T>(input: &'a str, parser: Parser<'a, char, T>) -> T {
